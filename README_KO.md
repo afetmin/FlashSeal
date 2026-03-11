@@ -20,6 +20,7 @@
 ---
 
 FlashSeal은 Cloudflare Pages, Pages Functions, KV를 기반으로 한 암호화 열람 후 자동 소각 텍스트·이미지 공유 도구입니다.
+페이지는 무거운 런타임 프레임워크에 의존하지 않습니다.
 
 ## 기능 개요
 
@@ -34,25 +35,31 @@ FlashSeal은 Cloudflare Pages, Pages Functions, KV를 기반으로 한 암호화
 
 ## 기술 스택
 
+- Svelte 5
+- Vite 7
+- Tailwind CSS 4
 - Cloudflare Pages
 - Cloudflare Pages Functions
 - Cloudflare KV
-- Functions 는 TypeScript 사용
-- 프런트엔드는 네이티브 HTML, CSS, JavaScript 사용
+- 프런트엔드 앱과 Pages Functions 는 TypeScript 사용
 
 ## 프로젝트 구조
 
-- `public/`: 정적 페이지, 스타일, PWA 자산, 프런트엔드 로직
+- `src/`: Svelte 앱 소스, UI 컴포넌트, 브라우저 로직, 스타일
+- `static/`: 빌드 시 그대로 복사되는 정적 자산
+- `public/`: Cloudflare Pages 배포용 빌드 출력물
 - `functions/api/secrets/index.ts`: 시크릿 생성 API
 - `functions/api/secrets/[id]/open.ts`: 최초 열람 API
 - `functions/api/i18n.ts`: API 측 메시지 사전
+- `vite.config.js`: Vite 빌드 설정
+- `svelte.config.js`: Svelte 컴파일러 설정
 - `wrangler.toml`: Pages 및 KV 설정
 
 ## 요구 사항
 
 - Node.js `20+`
 - npm
-- Cloudflare 계정
+- Cloudflare 무료 계정
 - 프로젝트 의존성으로 설치된 Wrangler 4
 
 `wrangler@4`는 Node 20+를 요구합니다. Node 18에서도 설치될 수 있지만, 경고가 뜨거나 동작이 불안정할 수 있습니다.
@@ -104,6 +111,7 @@ npm run dev
 - 앱 포트: `8788`
 - inspector 포트: `9230`
 - 로컬 state 디렉터리: `./.wrangler/state`
+- 프런트엔드 빌드 출력 디렉터리: `public/`
 
 접속 주소:
 
@@ -126,6 +134,7 @@ http://127.0.0.1:8788
 - 오래된 UI 가 보이면 브라우저의 service worker 와 사이트 데이터를 삭제
 - KV 생성이 실패하면 로그인 여부 또는 `CLOUDFLARE_API_TOKEN` 설정 여부 확인
 - 오래된 Node 버전에서 로컬 개발이 실패하면 Node 20+로 업그레이드
+- `public/index.html` 을 정적 파일로 직접 미리보기하지 마세요. 이 프로젝트는 Cloudflare Pages 라우팅과 빌드된 자산 경로를 전제로 합니다.
 
 ## Cloudflare Pages 배포
 
@@ -135,7 +144,7 @@ http://127.0.0.1:8788
 2. Cloudflare 의 `Workers & Pages` 열기
 3. 새 `Pages` 프로젝트를 만들고 저장소 연결
 4. 다음 빌드 설정 사용
-   - Build command: 비워 둠
+   - Build command: `npm run build`
    - Build output directory: `public`
 5. 프로덕션용 KV namespace 생성 또는 선택
 6. Pages 프로젝트 설정에서 KV 바인딩 추가
@@ -160,5 +169,5 @@ preview_id = "your-preview-kv-id"
 
 그 다음 Pages 에서 저장소를 연결하고 다음 값을 유지하세요.
 
-- Build command: 비워 둠
+- Build command: `npm run build`
 - Output directory: `public`
