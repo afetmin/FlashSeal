@@ -3,6 +3,12 @@ const SECRET_ID_LENGTH = 12;
 const SECRET_ID_ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 const VIEW_DURATION_SECONDS = 60;
 const DEFAULT_LANGUAGE = "en";
+const SITE_URL = "https://flashseal.space";
+const HOME_URL = `${SITE_URL}/`;
+const DEFAULT_ROBOTS = "index,follow,max-image-preview:large";
+const SECRET_ROBOTS = "noindex,nofollow,noarchive";
+const OG_IMAGE_URL = `${SITE_URL}/og-image.png`;
+const OG_IMAGE_ALT = "FlashSeal secure secret sharing preview";
 
 const translations = {
   en: {
@@ -23,7 +29,7 @@ const translations = {
     resultLabel: "Share link",
     copyButton: "Copy link",
     openLabel: "Paste a FlashSeal link",
-    openInputPlaceholder: "https://flashseal.app/s/abc123#k=...",
+    openInputPlaceholder: "https://flashseal.space/s/abc123#k=...",
     openButton: "Open secret",
     viewerTitle: "Secret opened",
     countdownLabel: "Burns in {seconds}s",
@@ -75,7 +81,7 @@ const translations = {
     resultLabel: "分享链接",
     copyButton: "复制链接",
     openLabel: "粘贴 FlashSeal 链接",
-    openInputPlaceholder: "https://flashseal.app/s/abc123#k=...",
+    openInputPlaceholder: "https://flashseal.space/s/abc123#k=...",
     openButton: "打开秘密",
     viewerTitle: "秘密已打开",
     countdownLabel: "{seconds} 秒后焚毁",
@@ -127,7 +133,7 @@ const translations = {
     resultLabel: "共有リンク",
     copyButton: "リンクをコピー",
     openLabel: "FlashSeal リンクを貼り付け",
-    openInputPlaceholder: "https://flashseal.app/s/abc123#k=...",
+    openInputPlaceholder: "https://flashseal.space/s/abc123#k=...",
     openButton: "シークレットを開く",
     viewerTitle: "シークレットを開きました",
     countdownLabel: "{seconds} 秒後に焼却",
@@ -179,7 +185,7 @@ const translations = {
     resultLabel: "공유 링크",
     copyButton: "링크 복사",
     openLabel: "FlashSeal 링크 붙여넣기",
-    openInputPlaceholder: "https://flashseal.app/s/abc123#k=...",
+    openInputPlaceholder: "https://flashseal.space/s/abc123#k=...",
     openButton: "시크릿 열기",
     viewerTitle: "시크릿이 열렸습니다",
     countdownLabel: "{seconds}초 후 소각",
@@ -725,20 +731,51 @@ async function readJsonResponse(response) {
 }
 
 function syncMeta(t) {
+  const isSecretPage = Boolean(window.location.pathname.match(/^\/s\/([^/]+)$/));
+  const canonicalUrl = HOME_URL;
+  const robots = isSecretPage ? SECRET_ROBOTS : DEFAULT_ROBOTS;
+
   document.title = t.pageTitle;
   setMeta("name", "description", t.pageDescription);
+  setMeta("name", "robots", robots);
+  setMeta("name", "application-name", "FlashSeal");
+  setMeta("name", "author", "FlashSeal");
   setMeta("property", "og:title", t.pageTitle);
   setMeta("property", "og:description", t.pageDescription);
+  setMeta("property", "og:url", canonicalUrl);
+  setMeta("property", "og:image", OG_IMAGE_URL);
+  setMeta("property", "og:image:alt", OG_IMAGE_ALT);
+  setMeta("property", "og:image:width", "1502");
+  setMeta("property", "og:image:height", "786");
   setMeta("property", "twitter:title", t.pageTitle);
   setMeta("property", "twitter:description", t.pageDescription);
+  setMeta("name", "twitter:url", canonicalUrl);
+  setMeta("name", "twitter:image", OG_IMAGE_URL);
+  setMeta("name", "twitter:image:alt", OG_IMAGE_ALT);
+  setCanonical(canonicalUrl);
 }
 
 function setMeta(attribute, value, content) {
   const selector = `meta[${attribute}="${value}"]`;
-  const element = document.querySelector(selector);
-  if (element) {
-    element.setAttribute("content", content);
+  const element = document.querySelector(selector) || createMeta(attribute, value);
+  element.setAttribute("content", content);
+}
+
+function createMeta(attribute, value) {
+  const element = document.createElement("meta");
+  element.setAttribute(attribute, value);
+  document.head.append(element);
+  return element;
+}
+
+function setCanonical(url) {
+  let canonical = document.querySelector('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement("link");
+    canonical.setAttribute("rel", "canonical");
+    document.head.append(canonical);
   }
+  canonical.setAttribute("href", url);
 }
 
 function setStatus(node, message, kind) {
