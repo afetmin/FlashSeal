@@ -229,6 +229,7 @@ const state = {
   kind: "text",
   selectedImage: null,
   resultLink: "",
+  openLocked: false,
   countdownTimer: null,
   imageObjectUrl: null,
   viewerObjectUrl: null
@@ -297,8 +298,8 @@ boot();
 function boot() {
   renderIcons();
   renderLanguageMenu();
-  applyTranslations();
   setMode(state.mode);
+  applyTranslations();
   setKind(state.kind);
   bindEvents();
   syncFromLocation();
@@ -330,6 +331,7 @@ function bindEvents() {
   elements.createButton?.addEventListener("click", handleCreateSecret);
   elements.copyButton?.addEventListener("click", copyResultLink);
   elements.openButton?.addEventListener("click", handleOpenSecret);
+  elements.openInput?.addEventListener("input", () => setOpenLocked(false));
   elements.openInput?.addEventListener("paste", handleOpenInputPaste);
   elements.openInput?.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
@@ -363,6 +365,7 @@ function applyTranslations() {
   elements.openLabel.textContent = t.openLabel;
   elements.openInput.placeholder = t.openInputPlaceholder;
   elements.openButton.textContent = t.openButton;
+  syncOpenButtonState();
   elements.viewerTitle.textContent = t.viewerTitle;
   elements.countdownLabel.textContent = interpolate(t.countdownLabel, { seconds: String(elements.countdownChip.textContent || VIEW_DURATION_SECONDS) });
   elements.featureEncryptionTitle.textContent = t.featureEncryptionTitle;
@@ -498,6 +501,10 @@ async function buildSecretPayload() {
 }
 
 async function handleOpenSecret() {
+  if (state.openLocked) {
+    return;
+  }
+
   const t = getText();
   setMode("open");
   clearStatus(elements.openStatus);
@@ -522,6 +529,9 @@ async function handleOpenSecret() {
     const result = await readJsonResponse(response);
 
     if (!response.ok) {
+      if (result?.code === "secret_opened" || result?.code === "secret_missing") {
+        setOpenLocked(true);
+      }
       throw new Error(mapServerError(result?.code, t, "open"));
     }
 
@@ -533,6 +543,7 @@ async function handleOpenSecret() {
 
     renderOpenedSecret(result.kind, result.mimeType, plaintext);
     setStatus(elements.openStatus, t.secretReady, "success");
+    setOpenLocked(true);
     startBurnCountdown();
   } catch (error) {
     setStatus(elements.openStatus, error.message || t.decryptFailed, "error");
@@ -584,6 +595,7 @@ function startBurnCountdown() {
     if (remaining <= 0) {
       stopBurnCountdown();
       clearViewer();
+      setOpenLocked(true);
       setStatus(elements.openStatus, getText().burnedNow, "error");
       return;
     }
@@ -792,6 +804,20 @@ function setStatus(node, message, kind) {
 function clearStatus(node) {
   node.textContent = "";
   node.classList.remove("is-error", "is-success");
+}
+
+function setOpenLocked(locked) {
+  state.openLocked = locked;
+  syncOpenButtonState();
+}
+
+function syncOpenButtonState() {
+  if (!elements.openButton) {
+    return;
+  }
+
+  elements.openButton.disabled = state.openLocked;
+  elements.openButton.setAttribute("aria-disabled", String(state.openLocked));
 }
 
 function mapServerError(code, t, source) {
