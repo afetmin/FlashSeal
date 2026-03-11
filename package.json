@@ -4,8 +4,13 @@
   "private": true,
   "description": "Encrypted burn-after-open text and image sharing tool on Cloudflare Pages + KV",
   "scripts": {
-    "build": "echo \"FlashSeal uses static assets in public/\"",
-    "dev": "wrangler pages dev public --kv SECRETS --port 8788 --ip 127.0.0.1 --inspector-port 9230 --persist-to ./.wrangler/state --log-level warn",
+    "build:app": "vite build",
+    "build:css": "tailwindcss -i ./src/app.css -o ./public/assets/app.css --minify",
+    "build": "npm run build:app && npm run build:css",
+    "dev:app": "vite build --watch --emptyOutDir false",
+    "dev:css": "tailwindcss -i ./src/app.css -o ./public/assets/app.css --watch",
+    "dev:pages": "wrangler pages dev public --kv SECRETS --port 8788 --ip 127.0.0.1 --inspector-port 9230 --persist-to ./.wrangler/state --log-level warn",
+    "dev": "concurrently -k \"npm:dev:app\" \"npm:dev:css\" \"npm:dev:pages\"",
     "kv:create": "wrangler kv namespace create SECRETS",
     "kv:create:preview": "wrangler kv namespace create SECRETS --preview"
   },
@@ -23,6 +28,12 @@
   "license": "MIT",
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241127.0",
+    "@sveltejs/vite-plugin-svelte": "^6.2.4",
+    "@tailwindcss/cli": "^4.2.1",
+    "concurrently": "^9.2.1",
+    "svelte": "^5.53.10",
+    "tailwindcss": "^4.2.1",
+    "vite": "^7.3.1",
     "wrangler": "^4.0.0"
   }
 }
