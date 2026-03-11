@@ -25,6 +25,7 @@ FlashSeal은 Cloudflare Pages, Pages Functions, KV를 기반으로 한 암호화
 
 - `text`, `image` 시크릿 지원
 - 이미지 1개당 크기 제한은 `15MB`
+- 이미지 붙여넣기 업로드 지원
 - 공유 링크 형식: `/s/:id#k=<base64url-key>`
 - 처음으로 정상적으로 연 1명만 내용을 볼 수 있음
 - 열람 후 `60초` 동안만 표시

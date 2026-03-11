@@ -17,7 +17,7 @@ const translations = {
     kindImage: "Image",
     textPlaceholder: "Paste your secret text here...",
     imagePickerTitle: "Choose an image",
-    imagePickerHelp: "PNG, JPG, WEBP up to 15MB",
+    imagePickerHelp: "PNG, JPG, WEBP up to 15MB, or paste an image",
     createButton: "Create sealed link",
     createHint: "Only the first successful viewer can open it. Unopened secrets expire in 1 hour.",
     resultLabel: "Share link",
@@ -69,7 +69,7 @@ const translations = {
     kindImage: "图片",
     textPlaceholder: "把秘密文本粘贴到这里...",
     imagePickerTitle: "选择图片",
-    imagePickerHelp: "支持 PNG、JPG、WEBP，最大 15MB",
+    imagePickerHelp: "支持 PNG、JPG、WEBP，最大 15MB，也可直接粘贴图片",
     createButton: "生成密封链接",
     createHint: "只有第一个成功打开的人能看到内容。未打开的秘密会在 1 小时后过期。",
     resultLabel: "分享链接",
@@ -121,7 +121,7 @@ const translations = {
     kindImage: "画像",
     textPlaceholder: "ここに秘密のテキストを貼り付けてください...",
     imagePickerTitle: "画像を選択",
-    imagePickerHelp: "PNG、JPG、WEBP、最大 15MB",
+    imagePickerHelp: "PNG、JPG、WEBP、最大 15MB、画像の貼り付けにも対応",
     createButton: "封印リンクを作成",
     createHint: "最初に成功して開いた人だけが閲覧できます。未開封の秘密は 1 時間で期限切れになります。",
     resultLabel: "共有リンク",
@@ -173,7 +173,7 @@ const translations = {
     kindImage: "이미지",
     textPlaceholder: "비밀 텍스트를 여기에 붙여넣으세요...",
     imagePickerTitle: "이미지 선택",
-    imagePickerHelp: "PNG, JPG, WEBP, 최대 15MB",
+    imagePickerHelp: "PNG, JPG, WEBP, 최대 15MB, 이미지 붙여넣기 지원",
     createButton: "봉인 링크 만들기",
     createHint: "처음으로 성공적으로 연 사람만 내용을 볼 수 있습니다. 열리지 않은 시크릿은 1시간 후 만료됩니다.",
     resultLabel: "공유 링크",
@@ -219,7 +219,7 @@ const languageOrder = ["en", "zh", "ja", "ko"];
 
 const state = {
   language: loadLanguage(),
-  mode: "create",
+  mode: resolveInitialMode(),
   kind: "text",
   selectedImage: null,
   resultLink: "",
@@ -292,6 +292,8 @@ function boot() {
   renderIcons();
   renderLanguageMenu();
   applyTranslations();
+  setMode(state.mode);
+  setKind(state.kind);
   bindEvents();
   syncFromLocation();
   registerServiceWorker();
@@ -311,6 +313,7 @@ function bindEvents() {
       elements.languageMenu.hidden = true;
     }
   });
+  document.addEventListener("paste", handleCreatePaste);
 
   elements.tabCreate?.addEventListener("click", () => setMode("create"));
   elements.tabOpen?.addEventListener("click", () => setMode("open"));
@@ -490,6 +493,7 @@ async function buildSecretPayload() {
 
 async function handleOpenSecret() {
   const t = getText();
+  setMode("open");
   clearStatus(elements.openStatus);
   clearViewer();
 
@@ -533,6 +537,7 @@ function handleOpenInputPaste() {
   window.setTimeout(() => {
     const parsed = parseSecretUrl(elements.openInput.value.trim());
     if (parsed?.id && parsed?.key) {
+      setMode("open");
       handleOpenSecret();
     }
   }, 0);
@@ -598,15 +603,36 @@ async function copyResultLink() {
   setStatus(elements.createStatus, getText().copied, "success");
 }
 
+function handleCreatePaste(event) {
+  if (state.mode !== "create") {
+    return;
+  }
+
+  const file = extractImageFile(event.clipboardData);
+  if (!file) {
+    return;
+  }
+
+  event.preventDefault();
+  if (state.kind !== "image") {
+    setKind("image");
+  }
+  applySelectedImage(file);
+}
+
 function handleImageSelection(event) {
   const file = event.target.files?.[0];
   if (!file) {
     return;
   }
 
+  applySelectedImage(file);
+  event.target.value = "";
+}
+
+function applySelectedImage(file) {
   if (file.size > MAX_IMAGE_BYTES) {
     setStatus(elements.createStatus, getText().imageTooLarge, "error");
-    event.target.value = "";
     return;
   }
 
@@ -618,6 +644,26 @@ function handleImageSelection(event) {
   elements.imagePreviewTag.src = state.imageObjectUrl;
   elements.imagePreview.hidden = false;
   setStatus(elements.createStatus, getText().imageSelected, "success");
+}
+
+function extractImageFile(clipboardData) {
+  const items = clipboardData?.items;
+  if (!items) {
+    return null;
+  }
+
+  for (const item of items) {
+    if (item.kind !== "file" || !item.type.startsWith("image/")) {
+      continue;
+    }
+
+    const file = item.getAsFile();
+    if (file) {
+      return file;
+    }
+  }
+
+  return null;
 }
 
 function clearViewer() {
@@ -776,6 +822,10 @@ function loadLanguage() {
     return "ko";
   }
   return DEFAULT_LANGUAGE;
+}
+
+function resolveInitialMode() {
+  return window.location.pathname.match(/^\/s\/([^/]+)$/) ? "open" : "create";
 }
 
 function releasePreviewObjectUrl() {

@@ -25,6 +25,7 @@ FlashSeal is an encrypted burn-after-open sharing tool for text and images, buil
 
 - Supports `text` and `image` secrets
 - Limits each image to `15MB`
+- Supports paste-to-upload for images
 - Shares secrets through direct links: `/s/:id#k=<base64url-key>`
 - Lets only the first successful viewer open a secret
 - Keeps opened secrets visible for `60 seconds`

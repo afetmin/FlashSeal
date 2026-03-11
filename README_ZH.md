@@ -25,6 +25,7 @@ FlashSeal 是一个基于 Cloudflare Pages、Pages Functions 和 KV 的加密阅
 
 - 支持 `text` 和 `image` 两种秘密内容
 - 单张图片大小限制为 `15MB`
+- 支持直接粘贴图片上传
 - 通过直接链接分享：`/s/:id#k=<base64url-key>`
 - 只有第一个成功访问的人可以打开秘密
 - 打开后内容可见 `60 秒`

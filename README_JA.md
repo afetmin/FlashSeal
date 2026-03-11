@@ -25,6 +25,7 @@ FlashSeal は、Cloudflare Pages、Pages Functions、KV を使った暗号化対
 
 - `text` と `image` のシークレットをサポート
 - 画像 1 枚あたりの上限は `15MB`
+- 画像の貼り付けアップロードに対応
 - 共有リンク形式: `/s/:id#k=<base64url-key>`
 - 最初に正常にアクセスした 1 人だけが閲覧可能
 - 開封後の表示時間は `60 秒`
