@@ -1,15 +1,32 @@
+<div align="center">
+
 # FlashSeal
+
+**Encrypted burn-after-open text and image sharing on Cloudflare Pages and KV**
 
 English | [简体中文](./README_ZH.md) | [日本語](./README_JA.md) | [한국어](./README_KO.md)
 
-FlashSeal is an encrypted burn-after-open text and image sharing tool built on Cloudflare Pages, Pages Functions, and KV.
+[![GitHub stars](https://img.shields.io/github/stars/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/issues)
+[![GitHub license](https://img.shields.io/github/license/afetmin/FlashSeal?style=flat-square)](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
+[![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-F38020?style=flat-square&logo=cloudflare)](https://pages.cloudflare.com/)
+[![Cloudflare KV](https://img.shields.io/badge/Cloudflare-KV-F38020?style=flat-square&logo=cloudflare)](https://developers.cloudflare.com/kv/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+
+[Source Code](https://github.com/afetmin/FlashSeal) | [Deploy Guide](https://github.com/afetmin/FlashSeal#deploy-to-cloudflare-pages) | [Report Issue](https://github.com/afetmin/FlashSeal/issues) | [License](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
+
+</div>
+
+---
+
+FlashSeal is an encrypted burn-after-open sharing tool for text and images, built on Cloudflare Pages, Pages Functions, and KV.
 
 ## What It Does
 
 - Supports `text` and `image` secrets
-- Limits images to `15MB`
-- Shares secrets by direct link: `/s/:id#k=<base64url-key>`
-- Allows only the first successful viewer to open a secret
+- Limits each image to `15MB`
+- Shares secrets through direct links: `/s/:id#k=<base64url-key>`
+- Lets only the first successful viewer open a secret
 - Keeps opened secrets visible for `60 seconds`
 - Expires unopened secrets after `1 hour`
 - Encrypts in the browser and stores ciphertext only
@@ -20,11 +37,11 @@ FlashSeal is an encrypted burn-after-open text and image sharing tool built on C
 - Cloudflare Pages Functions
 - Cloudflare KV
 - TypeScript for Functions
-- Native HTML/CSS/JS frontend
+- Native HTML, CSS, and JavaScript frontend
 
 ## Project Structure
 
-- `public/`: static app shell, styles, PWA files, client logic
+- `public/`: static app shell, styles, PWA assets, and client logic
 - `functions/api/secrets/index.ts`: create-secret endpoint
 - `functions/api/secrets/[id]/open.ts`: first-open endpoint
 - `functions/api/i18n.ts`: API-side message dictionary
@@ -50,12 +67,12 @@ npm install
 
 ### 2. Authenticate Wrangler
 
-Use one of these approaches:
+Use one of these options:
 
 - Run `npx wrangler login`
 - Or export `CLOUDFLARE_API_TOKEN` in your shell
 
-Without Cloudflare authentication, the KV namespace creation commands will fail.
+The KV namespace creation commands require Cloudflare authentication.
 
 ### 3. Create KV namespaces
 
@@ -66,7 +83,7 @@ npm run kv:create
 npm run kv:create:preview
 ```
 
-Wrangler will print namespace IDs. Copy them into [wrangler.toml](/Users/yilun/Desktop/FlashSeal/wrangler.toml):
+Wrangler will print the namespace IDs. Copy them into [wrangler.toml](/Users/yilun/Desktop/FlashSeal/wrangler.toml):
 
 ```toml
 [[kv_namespaces]]
@@ -81,37 +98,37 @@ preview_id = "your-preview-kv-id"
 npm run dev
 ```
 
-FlashSeal runs locally with:
+FlashSeal uses these local settings:
 
 - app port: `8788`
 - inspector port: `9230`
 - local state dir: `./.wrangler/state`
 
-Open:
+Then open:
 
 ```text
 http://127.0.0.1:8788
 ```
 
-### 5. Test the main flow locally
+### 5. Verify the main flow locally
 
 1. Create a text or image secret
 2. Copy the generated link
 3. Open that link in a new tab or window
 4. Confirm the secret opens automatically
 5. Confirm the countdown runs for 60 seconds
-6. Confirm reopening the same link fails
+6. Confirm the same link cannot be opened again
 
 ### Local troubleshooting
 
-- If `wrangler` commands fail after upgrading, use the scripts in `package.json` or `npx wrangler ...`
-- If a page shows stale UI, clear the service worker and site storage in DevTools
+- If `wrangler` commands fail after an upgrade, use the scripts in `package.json` or `npx wrangler ...`
+- If the UI looks stale, clear the service worker and site storage in DevTools
 - If KV creation fails, confirm you are logged in or `CLOUDFLARE_API_TOKEN` is set
-- If local dev fails on an older Node version, upgrade to Node 20+
+- If local development fails on an older Node version, upgrade to Node 20+
 
 ## Deploy To Cloudflare Pages
 
-### Option 1: Deploy from GitHub in the Cloudflare dashboard
+### Option 1: Connect the GitHub repository in the Cloudflare dashboard
 
 1. Push this project to a Git repository
 2. In Cloudflare, open `Workers & Pages`
@@ -125,13 +142,13 @@ http://127.0.0.1:8788
    - Namespace: your production namespace
 7. Save and deploy
 
-### Option 2: Prepare config first, then connect Pages
+### Option 2: Prepare the config first, then connect Pages
 
 Before connecting the repo, make sure [wrangler.toml](/Users/yilun/Desktop/FlashSeal/wrangler.toml) contains your real namespace IDs:
 
 ```toml
 name = "flashseal"
-compatibility_date = "2025-11-20"
+compatibility_date = "2026-03-11"
 pages_build_output_dir = "./public"
 
 [[kv_namespaces]]

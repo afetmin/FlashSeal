@@ -1,14 +1,31 @@
+<div align="center">
+
 # FlashSeal
+
+**Cloudflare Pages と KV で動く、暗号化対応の閲覧後自動消去テキスト・画像共有ツール**
 
 [English](./README.md) | [简体中文](./README_ZH.md) | 日本語 | [한국어](./README_KO.md)
 
-FlashSeal は、Cloudflare Pages、Pages Functions、KV を使った暗号化付きの閲覧後自動消去テキスト・画像共有ツールです。
+[![GitHub stars](https://img.shields.io/github/stars/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/issues)
+[![GitHub license](https://img.shields.io/github/license/afetmin/FlashSeal?style=flat-square)](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
+[![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-F38020?style=flat-square&logo=cloudflare)](https://pages.cloudflare.com/)
+[![Cloudflare KV](https://img.shields.io/badge/Cloudflare-KV-F38020?style=flat-square&logo=cloudflare)](https://developers.cloudflare.com/kv/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+
+[ソースコード](https://github.com/afetmin/FlashSeal) | [デプロイ手順](https://github.com/afetmin/FlashSeal#cloudflare-pages-へのデプロイ) | [Issue 報告](https://github.com/afetmin/FlashSeal/issues) | [ライセンス](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
+
+</div>
+
+---
+
+FlashSeal は、Cloudflare Pages、Pages Functions、KV を使った暗号化対応の閲覧後自動消去テキスト・画像共有ツールです。
 
 ## 機能概要
 
 - `text` と `image` のシークレットをサポート
-- 画像サイズ上限は `15MB`
-- 共有リンク形式：`/s/:id#k=<base64url-key>`
+- 画像 1 枚あたりの上限は `15MB`
+- 共有リンク形式: `/s/:id#k=<base64url-key>`
 - 最初に正常にアクセスした 1 人だけが閲覧可能
 - 開封後の表示時間は `60 秒`
 - 未開封のシークレットは `1 時間` で期限切れ
@@ -20,11 +37,11 @@ FlashSeal は、Cloudflare Pages、Pages Functions、KV を使った暗号化付
 - Cloudflare Pages Functions
 - Cloudflare KV
 - Functions は TypeScript
-- フロントエンドはネイティブ HTML/CSS/JS
+- フロントエンドはネイティブ HTML、CSS、JavaScript
 
 ## プロジェクト構成
 
-- `public/`: 静的ページ、スタイル、PWA ファイル、フロントエンドロジック
+- `public/`: 静的ページ、スタイル、PWA アセット、フロントエンドロジック
 - `functions/api/secrets/index.ts`: シークレット作成 API
 - `functions/api/secrets/[id]/open.ts`: 初回オープン API
 - `functions/api/i18n.ts`: API 側メッセージ辞書
@@ -50,12 +67,12 @@ npm install
 
 ### 2. Wrangler を認証
 
-次のいずれかを使用してください。
+次のいずれかを使います。
 
 - `npx wrangler login` を実行
 - または shell に `CLOUDFLARE_API_TOKEN` を設定
 
-Cloudflare 認証がないと KV namespace 作成コマンドは失敗します。
+KV namespace を作成する前に Cloudflare 認証が必要です。
 
 ### 3. KV namespace を作成
 
@@ -81,7 +98,7 @@ preview_id = "your-preview-kv-id"
 npm run dev
 ```
 
-ローカル設定は以下です。
+ローカル設定は次のとおりです。
 
 - アプリポート: `8788`
 - inspector ポート: `9230`
@@ -131,7 +148,7 @@ http://127.0.0.1:8788
 
 ```toml
 name = "flashseal"
-compatibility_date = "2025-11-20"
+compatibility_date = "2026-03-11"
 pages_build_output_dir = "./public"
 
 [[kv_namespaces]]

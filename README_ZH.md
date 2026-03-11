@@ -1,13 +1,30 @@
+<div align="center">
+
 # FlashSeal
+
+**基于 Cloudflare Pages 与 KV 的加密阅后即焚文本和图片分享工具**
 
 [English](./README.md) | 简体中文 | [日本語](./README_JA.md) | [한국어](./README_KO.md)
 
-FlashSeal 是一个基于 Cloudflare Pages、Pages Functions 和 KV 的加密阅后即焚文本/图片分享工具。
+[![GitHub stars](https://img.shields.io/github/stars/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/issues)
+[![GitHub license](https://img.shields.io/github/license/afetmin/FlashSeal?style=flat-square)](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
+[![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-F38020?style=flat-square&logo=cloudflare)](https://pages.cloudflare.com/)
+[![Cloudflare KV](https://img.shields.io/badge/Cloudflare-KV-F38020?style=flat-square&logo=cloudflare)](https://developers.cloudflare.com/kv/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+
+[源码](https://github.com/afetmin/FlashSeal) | [部署说明](https://github.com/afetmin/FlashSeal#部署到-cloudflare-pages) | [问题反馈](https://github.com/afetmin/FlashSeal/issues) | [许可证](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
+
+</div>
+
+---
+
+FlashSeal 是一个基于 Cloudflare Pages、Pages Functions 和 KV 的加密阅后即焚文本与图片分享工具。
 
 ## 功能概览
 
 - 支持 `text` 和 `image` 两种秘密内容
-- 图片大小限制为 `15MB`
+- 单张图片大小限制为 `15MB`
 - 通过直接链接分享：`/s/:id#k=<base64url-key>`
 - 只有第一个成功访问的人可以打开秘密
 - 打开后内容可见 `60 秒`
@@ -20,11 +37,11 @@ FlashSeal 是一个基于 Cloudflare Pages、Pages Functions 和 KV 的加密阅
 - Cloudflare Pages Functions
 - Cloudflare KV
 - Functions 使用 TypeScript
-- 前端使用原生 HTML/CSS/JS
+- 前端使用原生 HTML、CSS 和 JavaScript
 
 ## 项目结构
 
-- `public/`：静态页面、样式、PWA 文件、前端逻辑
+- `public/`：静态页面、样式、PWA 资源与前端逻辑
 - `functions/api/secrets/index.ts`：创建秘密接口
 - `functions/api/secrets/[id]/open.ts`：首次打开接口
 - `functions/api/i18n.ts`：接口侧多语言字典
@@ -55,7 +72,7 @@ npm install
 - 执行 `npx wrangler login`
 - 或在 shell 中设置 `CLOUDFLARE_API_TOKEN`
 
-如果没有 Cloudflare 认证，创建 KV namespace 的命令会失败。
+创建 KV namespace 前必须先完成 Cloudflare 认证。
 
 ### 3. 创建 KV namespace
 
@@ -66,7 +83,7 @@ npm run kv:create
 npm run kv:create:preview
 ```
 
-Wrangler 会输出 namespace ID。把它们填写到 [wrangler.toml](/Users/yilun/Desktop/FlashSeal/wrangler.toml)：
+Wrangler 会输出 namespace ID。把它们填入 [wrangler.toml](/Users/yilun/Desktop/FlashSeal/wrangler.toml)：
 
 ```toml
 [[kv_namespaces]]
@@ -81,13 +98,13 @@ preview_id = "your-preview-kv-id"
 npm run dev
 ```
 
-FlashSeal 本地开发固定使用：
+FlashSeal 本地开发使用以下固定配置：
 
 - 应用端口：`8788`
 - inspector 端口：`9230`
 - 本地状态目录：`./.wrangler/state`
 
-打开：
+然后访问：
 
 ```text
 http://127.0.0.1:8788
@@ -100,7 +117,7 @@ http://127.0.0.1:8788
 3. 在新的标签页或窗口中打开该链接
 4. 确认秘密会自动打开
 5. 确认倒计时为 60 秒
-6. 确认再次打开同一链接会失败
+6. 确认同一链接无法再次打开
 
 ### 本地开发常见问题
 
@@ -131,7 +148,7 @@ http://127.0.0.1:8788
 
 ```toml
 name = "flashseal"
-compatibility_date = "2025-11-20"
+compatibility_date = "2026-03-11"
 pages_build_output_dir = "./public"
 
 [[kv_namespaces]]

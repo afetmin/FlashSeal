@@ -1,13 +1,30 @@
+<div align="center">
+
 # FlashSeal
+
+**Cloudflare Pages와 KV 기반의 암호화 열람 후 자동 소각 텍스트·이미지 공유 도구**
 
 [English](./README.md) | [简体中文](./README_ZH.md) | [日本語](./README_JA.md) | 한국어
 
-FlashSeal은 Cloudflare Pages, Pages Functions, KV를 기반으로 한 암호화된 열람 후 자동 소각 텍스트/이미지 공유 도구입니다.
+[![GitHub stars](https://img.shields.io/github/stars/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/issues)
+[![GitHub license](https://img.shields.io/github/license/afetmin/FlashSeal?style=flat-square)](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
+[![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-F38020?style=flat-square&logo=cloudflare)](https://pages.cloudflare.com/)
+[![Cloudflare KV](https://img.shields.io/badge/Cloudflare-KV-F38020?style=flat-square&logo=cloudflare)](https://developers.cloudflare.com/kv/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+
+[소스 코드](https://github.com/afetmin/FlashSeal) | [배포 가이드](https://github.com/afetmin/FlashSeal#cloudflare-pages-배포) | [이슈 제보](https://github.com/afetmin/FlashSeal/issues) | [라이선스](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
+
+</div>
+
+---
+
+FlashSeal은 Cloudflare Pages, Pages Functions, KV를 기반으로 한 암호화 열람 후 자동 소각 텍스트·이미지 공유 도구입니다.
 
 ## 기능 개요
 
 - `text`, `image` 시크릿 지원
-- 이미지 크기 제한은 `15MB`
+- 이미지 1개당 크기 제한은 `15MB`
 - 공유 링크 형식: `/s/:id#k=<base64url-key>`
 - 처음으로 정상적으로 연 1명만 내용을 볼 수 있음
 - 열람 후 `60초` 동안만 표시
@@ -20,11 +37,11 @@ FlashSeal은 Cloudflare Pages, Pages Functions, KV를 기반으로 한 암호화
 - Cloudflare Pages Functions
 - Cloudflare KV
 - Functions 는 TypeScript 사용
-- 프런트엔드는 네이티브 HTML/CSS/JS 사용
+- 프런트엔드는 네이티브 HTML, CSS, JavaScript 사용
 
 ## 프로젝트 구조
 
-- `public/`: 정적 페이지, 스타일, PWA 파일, 프런트엔드 로직
+- `public/`: 정적 페이지, 스타일, PWA 자산, 프런트엔드 로직
 - `functions/api/secrets/index.ts`: 시크릿 생성 API
 - `functions/api/secrets/[id]/open.ts`: 최초 열람 API
 - `functions/api/i18n.ts`: API 측 메시지 사전
@@ -55,7 +72,7 @@ npm install
 - `npx wrangler login` 실행
 - 또는 shell 에 `CLOUDFLARE_API_TOKEN` 설정
 
-Cloudflare 인증이 없으면 KV namespace 생성 명령이 실패합니다.
+KV namespace 를 만들기 전에 Cloudflare 인증이 필요합니다.
 
 ### 3. KV namespace 생성
 
@@ -131,7 +148,7 @@ http://127.0.0.1:8788
 
 ```toml
 name = "flashseal"
-compatibility_date = "2025-11-20"
+compatibility_date = "2026-03-11"
 pages_build_output_dir = "./public"
 
 [[kv_namespaces]]
