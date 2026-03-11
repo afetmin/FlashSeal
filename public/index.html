@@ -37,17 +37,27 @@
       <header class="topbar">
         <a class="brand" href="/" aria-label="FlashSeal home">
           <span class="brand__mark" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none">
-              <rect x="5" y="10" width="14" height="10" rx="2.5" fill="currentColor"></rect>
-              <path d="M8.5 10V8a3.5 3.5 0 0 1 7 0v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-            </svg>
+            <i data-lucide="shield-check"></i>
           </span>
           <span class="brand__text">FlashSeal</span>
         </a>
-        <button id="language-button" class="lang-button" type="button" aria-label="Change language">
-          <span class="lang-button__icon" aria-hidden="true">◎</span>
-          <span id="current-language">EN</span>
-        </button>
+        <div class="topbar__actions">
+          <a
+            class="topbar__github"
+            href="https://github.com/afetmin/FlashSeal"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="View FlashSeal on GitHub"
+          >
+            <i data-lucide="github" aria-hidden="true"></i>
+          </a>
+          <button id="language-button" class="lang-button" type="button" aria-label="Change language">
+            <span class="lang-button__icon" aria-hidden="true">
+              <i data-lucide="languages"></i>
+            </span>
+            <span id="current-language">EN</span>
+          </button>
+        </div>
         <div id="language-menu" class="lang-menu" hidden></div>
       </header>
 
@@ -87,7 +97,9 @@
           <div id="image-composer" class="composer" hidden>
             <input id="secret-image" class="sr-only" type="file" accept="image/*" />
             <button id="image-picker" class="upload-card" type="button">
-              <span class="upload-card__icon" aria-hidden="true">▣</span>
+              <span class="upload-card__icon" aria-hidden="true">
+                <i data-lucide="image-up"></i>
+              </span>
               <span id="image-picker-label" class="upload-card__title">Choose an image</span>
               <span id="image-picker-help" class="upload-card__help">PNG, JPG, WEBP up to 15MB</span>
             </button>
@@ -139,22 +151,30 @@
 
       <section class="feature-grid" aria-label="FlashSeal features">
         <article class="feature-card">
-          <span class="feature-card__icon">⌘</span>
+          <span class="feature-card__icon" aria-hidden="true">
+            <i data-lucide="lock-keyhole"></i>
+          </span>
           <h2 id="feature-encryption-title">End-to-end encryption</h2>
           <p id="feature-encryption-body">We can't see your data. Only you and your recipient hold the keys.</p>
         </article>
         <article class="feature-card">
-          <span class="feature-card__icon">◉</span>
+          <span class="feature-card__icon" aria-hidden="true">
+            <i data-lucide="eye"></i>
+          </span>
           <h2 id="feature-once-title">One-time access</h2>
           <p id="feature-once-body">The secret link expires immediately after the first successful view.</p>
         </article>
         <article class="feature-card">
-          <span class="feature-card__icon">◔</span>
+          <span class="feature-card__icon" aria-hidden="true">
+            <i data-lucide="timer"></i>
+          </span>
           <h2 id="feature-window-title">60-second window</h2>
           <p id="feature-window-body">Once opened, the recipient has a short window before data is wiped.</p>
         </article>
         <article class="feature-card">
-          <span class="feature-card__icon">⚡</span>
+          <span class="feature-card__icon" aria-hidden="true">
+            <i data-lucide="flame"></i>
+          </span>
           <h2 id="feature-expiry-title">1-hour expiry</h2>
           <p id="feature-expiry-body">Unopened secrets are automatically deleted after 60 minutes.</p>
         </article>
@@ -162,6 +182,15 @@
     </main>
 
     <footer class="footer">
+      <a
+        class="footer__github"
+        href="https://github.com/afetmin/FlashSeal"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="View FlashSeal on GitHub"
+      >
+        <i data-lucide="github" aria-hidden="true"></i>
+      </a>
       <small id="footer-copy">© 2026 FlashSeal. Privacy by design.</small>
     </footer>
 
@@ -175,6 +204,7 @@
         "description": "Encrypted burn-after-open text and image sharing."
       }
     </script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script src="/assets/js/app.js" type="module"></script>
   </body>
 </html>

@@ -52,6 +52,13 @@ button {
   align-items: center;
   gap: 12px;
   position: relative;
+  z-index: 20;
+}
+
+.topbar__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
 }
 
 .brand {
@@ -75,6 +82,7 @@ button {
 .brand__mark svg {
   width: 100%;
   height: 100%;
+  stroke-width: 2.2;
 }
 
 .lang-button {
@@ -85,6 +93,54 @@ button {
   gap: 6px;
   color: var(--muted);
   padding: 8px 0;
+}
+
+.topbar__github {
+  color: color-mix(in srgb, var(--ink) 62%, white);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.topbar__github svg {
+  width: 100%;
+  height: 100%;
+}
+
+.topbar__github:hover,
+.topbar__github:focus-visible {
+  color: var(--green);
+  transform: translateY(-1px);
+}
+
+.topbar__github:focus-visible {
+  outline: none;
+}
+
+.lang-button__icon,
+.upload-card__icon,
+.feature-card__icon,
+.footer__github i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lang-button__icon svg,
+.upload-card__icon svg,
+.feature-card__icon svg,
+.footer__github svg {
+  width: 100%;
+  height: 100%;
+}
+
+.lang-button__icon {
+  width: 18px;
+  height: 18px;
 }
 
 .lang-menu {
@@ -99,6 +155,7 @@ button {
   display: grid;
   gap: 4px;
   min-width: 132px;
+  z-index: 30;
 }
 
 .lang-option {
@@ -253,7 +310,8 @@ input:focus {
 }
 
 .upload-card__icon {
-  font-size: 1.3rem;
+  width: 24px;
+  height: 24px;
   color: var(--green);
 }
 
@@ -437,6 +495,12 @@ input:focus {
   color: var(--green);
 }
 
+.feature-card__icon svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.15;
+}
+
 .feature-card h2 {
   margin: 0 0 8px;
   font-size: 1rem;
@@ -455,6 +519,36 @@ input:focus {
   padding: 0 20px 24px;
   color: var(--muted);
   font-size: 0.92rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  text-align: left;
+}
+
+.footer__github {
+  color: color-mix(in srgb, var(--ink) 62%, white);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.footer__github svg {
+  width: 16px;
+  height: 16px;
+}
+
+.footer__github:hover,
+.footer__github:focus-visible {
+  color: var(--green);
+  transform: translateY(-1px);
+}
+
+.footer__github:focus-visible {
+  outline: none;
 }
 
 .sr-only {

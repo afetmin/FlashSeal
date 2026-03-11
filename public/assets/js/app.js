@@ -289,11 +289,16 @@ const elements = {
 boot();
 
 function boot() {
+  renderIcons();
   renderLanguageMenu();
   applyTranslations();
   bindEvents();
   syncFromLocation();
   registerServiceWorker();
+}
+
+function renderIcons() {
+  window.lucide?.createIcons();
 }
 
 function bindEvents() {
