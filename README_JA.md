@@ -20,6 +20,7 @@
 ---
 
 FlashSeal は、Cloudflare Pages、Pages Functions、KV を使った暗号化対応の閲覧後自動消去テキスト・画像共有ツールです。
+ページは重量級のランタイムフレームワークに依存しません。
 
 ## 機能概要
 
@@ -34,25 +35,31 @@ FlashSeal は、Cloudflare Pages、Pages Functions、KV を使った暗号化対
 
 ## 技術スタック
 
+- Svelte 5
+- Vite 7
+- Tailwind CSS 4
 - Cloudflare Pages
 - Cloudflare Pages Functions
 - Cloudflare KV
-- Functions は TypeScript
-- フロントエンドはネイティブ HTML、CSS、JavaScript
+- フロントエンドアプリと Pages Functions は TypeScript
 
 ## プロジェクト構成
 
-- `public/`: 静的ページ、スタイル、PWA アセット、フロントエンドロジック
+- `src/`: Svelte アプリのソース、UI コンポーネント、ブラウザロジック、スタイル
+- `static/`: ビルド時にそのままコピーされる静的アセット
+- `public/`: Cloudflare Pages にデプロイするビルド出力
 - `functions/api/secrets/index.ts`: シークレット作成 API
 - `functions/api/secrets/[id]/open.ts`: 初回オープン API
 - `functions/api/i18n.ts`: API 側メッセージ辞書
+- `vite.config.js`: Vite ビルド設定
+- `svelte.config.js`: Svelte コンパイラ設定
 - `wrangler.toml`: Pages と KV の設定
 
 ## 必要環境
 
 - Node.js `20+`
 - npm
-- Cloudflare アカウント
+- Cloudflare 無料アカウント
 - プロジェクト依存としてインストールされた Wrangler 4
 
 `wrangler@4` は Node 20+ を前提としています。Node 18 でもインストールできる場合がありますが、警告や不安定な動作が出ることがあります。
@@ -104,6 +111,7 @@ npm run dev
 - アプリポート: `8788`
 - inspector ポート: `9230`
 - ローカル state ディレクトリ: `./.wrangler/state`
+- フロントエンドのビルド出力先: `public/`
 
 アクセス先:
 
@@ -126,6 +134,7 @@ http://127.0.0.1:8788
 - 古い UI が表示される場合は、ブラウザの service worker とサイトデータを削除する
 - KV 作成が失敗する場合は、ログイン済みか `CLOUDFLARE_API_TOKEN` が設定されているか確認する
 - 古い Node バージョンでローカル開発が失敗する場合は Node 20+ に上げる
+- `public/index.html` を静的ファイルとして直接プレビューしないでください。このプロジェクトは Cloudflare Pages のルーティングとビルド済みアセットを前提にしています。
 
 ## Cloudflare Pages へのデプロイ
 
@@ -135,7 +144,7 @@ http://127.0.0.1:8788
 2. Cloudflare の `Workers & Pages` を開く
 3. 新しい `Pages` プロジェクトを作成し、リポジトリを接続する
 4. ビルド設定は以下を使う
-   - Build command: 空のまま
+   - Build command: `npm run build`
    - Build output directory: `public`
 5. 本番用 KV namespace を作成または選択する
 6. Pages プロジェクト設定で KV バインディングを追加する
@@ -160,5 +169,5 @@ preview_id = "your-preview-kv-id"
 
 その後 Pages でリポジトリを接続し、次を維持します。
 
-- Build command: 空のまま
+- Build command: `npm run build`
 - Output directory: `public`

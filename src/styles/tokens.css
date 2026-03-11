@@ -1,0 +1,14 @@
+@theme {
+  --color-bg: #f3f5f3;
+  --color-surface: #ffffff;
+  --color-surface-soft: #f8faf8;
+  --color-ink: #2f3850;
+  --color-muted: #8f99ac;
+  --color-line: #e5e8ec;
+  --color-green: #4fb34f;
+  --color-green-deep: #3b983b;
+  --color-green-soft: #eaf5ea;
+  --color-danger: #c44c4c;
+  --shadow-shell: 0 16px 40px rgba(69, 85, 111, 0.08);
+  --shadow-card: 0 10px 24px rgba(69, 85, 111, 0.04);
+}
