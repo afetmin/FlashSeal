@@ -4,5 +4,5 @@ pages_build_output_dir = "./public"
 
 [[kv_namespaces]]
 binding = "SECRETS"
-id = "replace-with-production-kv-id"
-preview_id = "replace-with-preview-kv-id"
+id = "e70391c8868949458750a2c87b9dec93"
+preview_id = "5e2a8d177bf64cc6bc9ab60cc2aa10b0"
