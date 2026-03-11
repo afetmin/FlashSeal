@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>FlashSeal | Share secrets, once.</title>
+    <meta
+      name="description"
+      content="Create encrypted text and image links that self-destruct 60 seconds after the first successful open."
+    />
+    <meta
+      name="keywords"
+      content="encrypted sharing,burn after reading,secret link,temporary image sharing,temporary text sharing"
+    />
+    <meta name="theme-color" content="#4fb34f" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="FlashSeal | Share secrets, once." />
+    <meta
+      property="og:description"
+      content="Create encrypted text and image links that self-destruct 60 seconds after the first successful open."
+    />
+    <meta property="og:site_name" content="FlashSeal" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="FlashSeal | Share secrets, once." />
+    <meta
+      property="twitter:description"
+      content="Create encrypted text and image links that self-destruct 60 seconds after the first successful open."
+    />
+    <link rel="canonical" href="/" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon-192.svg" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="FlashSeal home">
+          <span class="brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <rect x="5" y="10" width="14" height="10" rx="2.5" fill="currentColor"></rect>
+              <path d="M8.5 10V8a3.5 3.5 0 0 1 7 0v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            </svg>
+          </span>
+          <span class="brand__text">FlashSeal</span>
+        </a>
+        <button id="language-button" class="lang-button" type="button" aria-label="Change language">
+          <span class="lang-button__icon" aria-hidden="true">◎</span>
+          <span id="current-language">EN</span>
+        </button>
+        <div id="language-menu" class="lang-menu" hidden></div>
+      </header>
+
+      <section class="hero">
+        <h1 id="hero-title">Share secrets, once.</h1>
+        <p id="hero-subtitle-line-1">Encrypted in your browser.</p>
+        <p id="hero-subtitle-line-2">Self-destructs after viewing.</p>
+      </section>
+
+      <section class="panel">
+        <div class="tablist" role="tablist" aria-label="Secret actions">
+          <button id="tab-create" class="tab is-active" type="button" role="tab" aria-selected="true">
+            <span id="tab-create-label">Create Secret</span>
+          </button>
+          <button id="tab-open" class="tab" type="button" role="tab" aria-selected="false">
+            <span id="tab-open-label">Open Secret</span>
+          </button>
+        </div>
+
+        <section id="create-panel" class="panel__body" role="tabpanel">
+          <div class="segmented" role="tablist" aria-label="Secret type">
+            <button id="kind-text" class="chip is-active" type="button" role="tab" aria-selected="true">
+              <span id="kind-text-label">Text</span>
+            </button>
+            <button id="kind-image" class="chip" type="button" role="tab" aria-selected="false">
+              <span id="kind-image-label">Image</span>
+            </button>
+          </div>
+
+          <div id="text-composer" class="composer">
+            <label class="field field--textarea" for="secret-text">
+              <span class="sr-only" id="secret-text-label">Secret text</span>
+              <textarea id="secret-text" rows="7" placeholder="Paste your secret text here..."></textarea>
+            </label>
+          </div>
+
+          <div id="image-composer" class="composer" hidden>
+            <input id="secret-image" class="sr-only" type="file" accept="image/*" />
+            <button id="image-picker" class="upload-card" type="button">
+              <span class="upload-card__icon" aria-hidden="true">▣</span>
+              <span id="image-picker-label" class="upload-card__title">Choose an image</span>
+              <span id="image-picker-help" class="upload-card__help">PNG, JPG, WEBP up to 15MB</span>
+            </button>
+            <div id="image-preview" class="image-preview" hidden>
+              <img id="image-preview-tag" alt="" />
+              <div class="image-preview__meta">
+                <strong id="image-name">image.png</strong>
+                <span id="image-size">0 MB</span>
+              </div>
+            </div>
+          </div>
+
+          <button id="create-button" class="primary-button" type="button">Create sealed link</button>
+          <p id="create-hint" class="hint">Only the first successful viewer can open it. Unopened secrets expire in 1 hour.</p>
+          <p id="create-status" class="status" aria-live="polite"></p>
+
+          <section id="result-card" class="result-card" hidden>
+            <div class="result-card__label" id="result-label">Share link</div>
+            <div id="result-link" class="result-card__value"></div>
+            <div class="result-card__actions">
+              <button id="copy-button" class="secondary-button" type="button">Copy link</button>
+            </div>
+          </section>
+        </section>
+
+        <section id="open-panel" class="panel__body" role="tabpanel" hidden>
+          <label class="field" for="open-link">
+            <span id="open-label">Paste a FlashSeal link</span>
+            <input id="open-link" type="url" autocomplete="off" />
+          </label>
+          <button id="open-button" class="primary-button" type="button">Open secret</button>
+          <p id="open-status" class="status" aria-live="polite"></p>
+
+          <section id="viewer-card" class="viewer-card" hidden>
+            <div class="viewer-card__head">
+              <div class="viewer-card__meta">
+                <strong id="viewer-title">Secret opened</strong>
+                <span id="countdown-label">Burns in 60s</span>
+              </div>
+              <div id="countdown-chip" class="countdown-chip">60</div>
+            </div>
+            <div id="viewer-text" class="viewer-text" hidden></div>
+            <div id="viewer-image-shell" class="viewer-image-shell" hidden>
+              <img id="viewer-image" alt="" />
+            </div>
+          </section>
+        </section>
+      </section>
+
+      <section class="feature-grid" aria-label="FlashSeal features">
+        <article class="feature-card">
+          <span class="feature-card__icon">⌘</span>
+          <h2 id="feature-encryption-title">End-to-end encryption</h2>
+          <p id="feature-encryption-body">We can't see your data. Only you and your recipient hold the keys.</p>
+        </article>
+        <article class="feature-card">
+          <span class="feature-card__icon">◉</span>
+          <h2 id="feature-once-title">One-time access</h2>
+          <p id="feature-once-body">The secret link expires immediately after the first successful view.</p>
+        </article>
+        <article class="feature-card">
+          <span class="feature-card__icon">◔</span>
+          <h2 id="feature-window-title">60-second window</h2>
+          <p id="feature-window-body">Once opened, the recipient has a short window before data is wiped.</p>
+        </article>
+        <article class="feature-card">
+          <span class="feature-card__icon">⚡</span>
+          <h2 id="feature-expiry-title">1-hour expiry</h2>
+          <p id="feature-expiry-body">Unopened secrets are automatically deleted after 60 minutes.</p>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <small id="footer-copy">© 2026 FlashSeal. Privacy by design.</small>
+    </footer>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "FlashSeal",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Web",
+        "description": "Encrypted burn-after-open text and image sharing."
+      }
+    </script>
+    <script src="/assets/js/app.js" type="module"></script>
+  </body>
+</html>

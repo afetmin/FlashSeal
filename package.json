@@ -1,0 +1,28 @@
+{
+  "name": "flashseal",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Encrypted burn-after-open text and image sharing tool on Cloudflare Pages + KV",
+  "scripts": {
+    "build": "echo \"FlashSeal uses static assets in public/\"",
+    "dev": "wrangler pages dev public --kv SECRETS --port 8788 --ip 127.0.0.1 --inspector-port 9230 --persist-to ./.wrangler/state --log-level warn",
+    "kv:create": "wrangler kv namespace create SECRETS",
+    "kv:create:preview": "wrangler kv namespace create SECRETS --preview"
+  },
+  "keywords": [
+    "cloudflare",
+    "cloudflare-pages",
+    "cloudflare-workers",
+    "kv",
+    "secret-sharing",
+    "encrypted-sharing",
+    "burn-after-reading",
+    "image-sharing",
+    "text-sharing"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241127.0",
+    "wrangler": "^4.0.0"
+  }
+}
