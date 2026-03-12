@@ -29,8 +29,9 @@ The page ships without a heavy runtime framework on the client.
 - Supports paste-to-upload for images
 - Shares secrets through direct links: `/s/:id#k=<base64url-key>`
 - Lets only the first successful viewer open a secret
+- Supports delayed opening with preset options: `5`, `15`, or `30` minutes
 - Keeps opened secrets visible for `60 seconds`
-- Expires unopened secrets after `1 hour`
+- Expires unopened secrets `1 hour` after creation, even when delayed opening is enabled
 - Encrypts in the browser and stores ciphertext only
 
 ## Stack
@@ -48,8 +49,8 @@ The page ships without a heavy runtime framework on the client.
 - `src/`: Svelte app source, UI components, shared browser logic, and styles
 - `static/`: static assets copied into the final build
 - `public/`: generated build output for Cloudflare Pages deployment
-- `functions/api/secrets/index.ts`: create-secret endpoint
-- `functions/api/secrets/[id]/open.ts`: first-open endpoint
+- `functions/api/secrets/index.ts`: create-secret endpoint with delayed-open configuration
+- `functions/api/secrets/[id]/open.ts`: first-open endpoint with unlock-time enforcement
 - `functions/api/i18n.ts`: API-side message dictionary
 - `vite.config.js`: Vite build configuration
 - `svelte.config.js`: Svelte compiler configuration
@@ -122,11 +123,13 @@ http://127.0.0.1:8788
 ### 5. Verify the main flow locally
 
 1. Create a text or image secret
-2. Copy the generated link
-3. Open that link in a new tab or window
-4. Confirm the secret opens automatically
-5. Confirm the countdown runs for 60 seconds
-6. Confirm the same link cannot be opened again
+2. Optionally set delayed opening to `5`, `15`, or `30` minutes
+3. Copy the generated link
+4. Open that link in a new tab or window
+5. If delayed opening is enabled, confirm the UI shows that the secret is still locked
+6. After the unlock time, confirm the secret opens automatically
+7. Confirm the countdown runs for 60 seconds
+8. Confirm the same link cannot be opened again
 
 ### Local troubleshooting
 

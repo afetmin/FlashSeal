@@ -29,8 +29,9 @@ FlashSeal은 Cloudflare Pages, Pages Functions, KV를 기반으로 한 암호화
 - 이미지 붙여넣기 업로드 지원
 - 공유 링크 형식: `/s/:id#k=<base64url-key>`
 - 처음으로 정상적으로 연 1명만 내용을 볼 수 있음
+- `5`, `15`, `30`분 뒤에 열 수 있도록 지연 열기 설정 지원
 - 열람 후 `60초` 동안만 표시
-- 열리지 않은 시크릿은 `1시간` 후 만료
+- 지연 열기를 설정해도 열리지 않은 시크릿은 생성 후 `1시간` 뒤 만료
 - 콘텐츠는 브라우저에서 암호화되며 서버에는 암호문만 저장
 
 ## 기술 스택
@@ -48,8 +49,8 @@ FlashSeal은 Cloudflare Pages, Pages Functions, KV를 기반으로 한 암호화
 - `src/`: Svelte 앱 소스, UI 컴포넌트, 브라우저 로직, 스타일
 - `static/`: 빌드 시 그대로 복사되는 정적 자산
 - `public/`: Cloudflare Pages 배포용 빌드 출력물
-- `functions/api/secrets/index.ts`: 시크릿 생성 API
-- `functions/api/secrets/[id]/open.ts`: 최초 열람 API
+- `functions/api/secrets/index.ts`: 지연 열기 설정을 포함한 시크릿 생성 API
+- `functions/api/secrets/[id]/open.ts`: 열기 가능 시각을 강제하는 최초 열람 API
 - `functions/api/i18n.ts`: API 측 메시지 사전
 - `vite.config.js`: Vite 빌드 설정
 - `svelte.config.js`: Svelte 컴파일러 설정
@@ -122,11 +123,13 @@ http://127.0.0.1:8788
 ### 5. 로컬에서 메인 플로우 확인
 
 1. 텍스트 또는 이미지 시크릿을 생성
-2. 생성된 링크를 복사
-3. 새 탭 또는 창에서 해당 링크를 열기
-4. 시크릿이 자동으로 열리는지 확인
-5. 카운트다운이 60초인지 확인
-6. 같은 링크를 다시 열 수 없는지 확인
+2. 필요하면 `5`, `15`, `30`분 지연 열기를 설정
+3. 생성된 링크를 복사
+4. 새 탭 또는 창에서 해당 링크를 열기
+5. 지연 열기를 설정했다면 아직 열 수 없다는 안내가 보이는지 확인
+6. 열기 가능 시각이 지나면 시크릿이 자동으로 열리는지 확인
+7. 카운트다운이 60초인지 확인
+8. 같은 링크를 다시 열 수 없는지 확인
 
 ### 로컬 개발 문제 해결
 

@@ -29,8 +29,9 @@ FlashSeal 是一个基于 Cloudflare Pages、Pages Functions 和 KV 的加密阅
 - 支持直接粘贴图片上传
 - 通过直接链接分享：`/s/:id#k=<base64url-key>`
 - 只有第一个成功访问的人可以打开秘密
+- 支持设置 `5`、`15`、`30` 分钟后才可打开
 - 打开后内容可见 `60 秒`
-- 未打开的秘密会在 `1 小时` 后过期
+- 即使设置了延迟打开，未打开的秘密也会在创建 `1 小时` 后过期
 - 内容在浏览器中加密，后端只保存密文
 
 ## 技术栈
@@ -48,8 +49,8 @@ FlashSeal 是一个基于 Cloudflare Pages、Pages Functions 和 KV 的加密阅
 - `src/`：Svelte 应用源码、UI 组件、浏览器端共享逻辑与样式
 - `static/`：构建时直接复制的静态资源
 - `public/`：部署到 Cloudflare Pages 的构建产物
-- `functions/api/secrets/index.ts`：创建秘密接口
-- `functions/api/secrets/[id]/open.ts`：首次打开接口
+- `functions/api/secrets/index.ts`：带延迟打开配置的创建秘密接口
+- `functions/api/secrets/[id]/open.ts`：强制校验可打开时间的首次打开接口
 - `functions/api/i18n.ts`：接口侧多语言字典
 - `vite.config.js`：Vite 构建配置
 - `svelte.config.js`：Svelte 编译配置
@@ -122,11 +123,13 @@ http://127.0.0.1:8788
 ### 5. 本地验证主流程
 
 1. 创建一个文本或图片秘密
-2. 复制生成的链接
-3. 在新的标签页或窗口中打开该链接
-4. 确认秘密会自动打开
-5. 确认倒计时为 60 秒
-6. 确认同一链接无法再次打开
+2. 按需设置 `5`、`15` 或 `30` 分钟延迟打开
+3. 复制生成的链接
+4. 在新的标签页或窗口中打开该链接
+5. 如果设置了延迟打开，确认界面提示该秘密暂时不可打开
+6. 到达可打开时间后，确认秘密会自动打开
+7. 确认倒计时为 60 秒
+8. 确认同一链接无法再次打开
 
 ### 本地开发常见问题
 
