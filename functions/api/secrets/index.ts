@@ -10,6 +10,7 @@ interface CreateSecretBody {
   ciphertext?: string;
   iv?: string;
   mimeType?: string;
+  unlockDelayMinutes?: number;
 }
 
 interface SecretRecord {
@@ -18,12 +19,14 @@ interface SecretRecord {
   iv: string;
   mimeType: string;
   createdAt: number;
+  unlockAt: number;
   viewState: "unopened" | "viewing";
   viewStartedAt: number | null;
 }
 
 const ONE_HOUR_IN_SECONDS = 3600;
 const MAX_ENCRYPTED_PAYLOAD_BYTES = 21 * 1024 * 1024;
+const VALID_UNLOCK_DELAY_MINUTES = [0, 5, 15, 30] as const;
 
 export async function onRequestPost(context: { request: Request; env: Env }) {
   const { request, env } = context;
@@ -45,6 +48,10 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     return json({ error: t("invalidSecretKind"), code: "invalid_kind" }, 400);
   }
 
+  if (!isValidUnlockDelayMinutes(body.unlockDelayMinutes)) {
+    return json({ error: t("invalidUnlockDelay"), code: "invalid_unlock_delay" }, 400);
+  }
+
   if (byteLength(body.ciphertext) > MAX_ENCRYPTED_PAYLOAD_BYTES) {
     return json({ error: t("payloadTooLarge"), code: "payload_too_large" }, 413);
   }
@@ -54,12 +61,14 @@ export async function onRequestPost(context: { request: Request; env: Env }) {
     return json({ error: t("secretIdTaken"), code: "secret_id_taken" }, 409);
   }
 
+  const createdAt = Date.now();
   const record: SecretRecord = {
     kind: body.kind,
     ciphertext: body.ciphertext,
     iv: body.iv,
     mimeType: body.mimeType,
-    createdAt: Date.now(),
+    createdAt,
+    unlockAt: createdAt + body.unlockDelayMinutes * 60_000,
     viewState: "unopened",
     viewStartedAt: null
   };
@@ -97,4 +106,9 @@ function corsHeaders() {
 
 function byteLength(value: string) {
   return new TextEncoder().encode(value).byteLength;
+}
+
+function isValidUnlockDelayMinutes(value: number | undefined): value is (typeof VALID_UNLOCK_DELAY_MINUTES)[number] {
+  if (typeof value !== "number" || !Number.isInteger(value)) return false;
+  return VALID_UNLOCK_DELAY_MINUTES.includes(value as (typeof VALID_UNLOCK_DELAY_MINUTES)[number]);
 }

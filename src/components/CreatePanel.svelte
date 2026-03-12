@@ -2,9 +2,12 @@
   import type { SecretKind } from "../lib/core";
   import type { StatusKind } from "../lib/status";
   import type { Translation } from "../lib/translations";
+  import { formatUnlockDelayOption, type UnlockDelayMinutes } from "../lib/unlock";
 
   export let t: Translation;
   export let kind: SecretKind;
+  export let unlockDelayMinutes: UnlockDelayMinutes;
+  export let unlockDelayOptions: readonly UnlockDelayMinutes[];
   export let textValue = "";
   export let imagePreviewUrl = "";
   export let imageName = "";
@@ -14,6 +17,7 @@
   export let statusKind: StatusKind = "";
   export let fileInput: HTMLInputElement | undefined;
   export let onSelectKind: (kind: SecretKind) => void;
+  export let onSelectUnlockDelay: (minutes: UnlockDelayMinutes) => void;
   export let onPickImage: () => void;
   export let onImageChange: (event: Event) => void;
   export let onCreate: () => void;
@@ -21,9 +25,26 @@
 </script>
 
 <section class="px-3.5 py-[18px] sm:px-[22px] sm:py-[22px]" role="tabpanel">
-  <div class="mb-4 inline-flex gap-2.5" role="tablist" aria-label="Secret type">
-    <button class={`rounded-full px-4 py-1.5 text-[0.93rem] font-bold ${kind === "text" ? "bg-green text-white" : "bg-[#dcebdc] text-green"}`} type="button" role="tab" aria-selected={kind === "text"} on:click={() => onSelectKind("text")}>{t.kindText}</button>
-    <button class={`rounded-full px-4 py-1.5 text-[0.93rem] font-bold ${kind === "image" ? "bg-green text-white" : "bg-[#dcebdc] text-green"}`} type="button" role="tab" aria-selected={kind === "image"} on:click={() => onSelectKind("image")}>{t.kindImage}</button>
+  <div class="mb-4 flex flex-col gap-3 rounded-[20px] bg-[rgba(237,242,237,0.68)] px-4 py-3 lg:flex-row lg:items-center lg:justify-between">
+    <div class="inline-flex gap-2.5" role="tablist" aria-label="Secret type">
+      <button class={`rounded-full px-4 py-1.5 text-[0.93rem] font-bold ${kind === "text" ? "bg-green text-white" : "bg-[#dcebdc] text-green"}`} type="button" role="tab" aria-selected={kind === "text"} on:click={() => onSelectKind("text")}>{t.kindText}</button>
+      <button class={`rounded-full px-4 py-1.5 text-[0.93rem] font-bold ${kind === "image" ? "bg-green text-white" : "bg-[#dcebdc] text-green"}`} type="button" role="tab" aria-selected={kind === "image"} on:click={() => onSelectKind("image")}>{t.kindImage}</button>
+    </div>
+    <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-end lg:gap-4">
+      <div class="text-[0.95rem] font-semibold whitespace-nowrap text-ink">{t.delayLabel}</div>
+      <div class="flex flex-wrap gap-2.5">
+        {#each unlockDelayOptions as delay}
+          <button
+            class={`rounded-full px-4 py-1.5 text-[0.93rem] font-bold ${unlockDelayMinutes === delay ? "bg-green text-white" : "bg-[#dcebdc] text-green"}`}
+            type="button"
+            aria-pressed={unlockDelayMinutes === delay}
+            on:click={() => onSelectUnlockDelay(delay)}
+          >
+            {formatUnlockDelayOption(delay, t)}
+          </button>
+        {/each}
+      </div>
+    </div>
   </div>
 
   <div class="mb-4" hidden={kind !== "text"}>

@@ -9,12 +9,15 @@
   import { HOME_URL, MAX_IMAGE_BYTES, SECRET_ID_LENGTH, VIEW_DURATION_SECONDS, base64UrlDecode, base64UrlEncode, extractImageFile, formatBytes, loadLanguage, parseSecretUrl, randomId, readJsonResponse, resolveInitialMode, type Mode, type SecretKind } from "./lib/core";
   import { syncMeta } from "./lib/meta";
   import { asStatusMessageKey, mapServerError, resolveStatusMessage, type StatusMessageKey, type StatusState } from "./lib/status";
+  import { UNLOCK_DELAY_OPTIONS, formatSecretLockedMessage, type UnlockDelayMinutes } from "./lib/unlock";
 
-  type OpenResponse = { code?: string; iv: string; ciphertext: string; kind: SecretKind; mimeType?: string };
+  type CreateResponse = { code?: string };
+  type OpenResponse = { code?: string; iv: string; ciphertext: string; kind: SecretKind; mimeType?: string; unlockAt?: number; now?: number };
 
   let language: LanguageCode = DEFAULT_LANGUAGE;
   let mode: Mode = "create";
   let kind: SecretKind = "text";
+  let unlockDelayMinutes: UnlockDelayMinutes = 0;
   let menuOpen = false;
   let textValue = "";
   let selectedImage: File | null = null;
@@ -98,9 +101,10 @@
       const ivBytes = crypto.getRandomValues(new Uint8Array(12));
       const cryptoKey = await crypto.subtle.importKey("raw", keyBytes, "AES-GCM", false, ["encrypt"]);
       const encryptedBytes = await crypto.subtle.encrypt({ name: "AES-GCM", iv: ivBytes }, cryptoKey, secretPayload.bytes);
-      const response = await fetch(`/api/secrets?lang=${language}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, kind: secretPayload.kind, mimeType: secretPayload.mimeType, iv: base64UrlEncode(ivBytes), ciphertext: base64UrlEncode(new Uint8Array(encryptedBytes)) }) });
-      const result = await response.json();
-      if (!response.ok) throw new Error(mapServerError(result?.code, copy, "create"));
+      const body = JSON.stringify({ id, kind: secretPayload.kind, mimeType: secretPayload.mimeType, unlockDelayMinutes, iv: base64UrlEncode(ivBytes), ciphertext: base64UrlEncode(new Uint8Array(encryptedBytes)) });
+      const response = await fetch(`/api/secrets?lang=${language}`, { method: "POST", headers: { "Content-Type": "application/json" }, body });
+      const result = await response.json() as CreateResponse;
+      if (!response.ok) throw new Error(mapServerError(result?.code, "create"));
       resultLink = `${window.location.origin}/s/${id}#k=${base64UrlEncode(keyBytes)}`;
       setStatus("create", "created", "success");
     } catch (error) {
@@ -134,6 +138,10 @@
       const response = await fetch(`/api/secrets/${parsed.id}/open?lang=${language}`, { method: "POST" });
       const result = await readJsonResponse<OpenResponse>(response, copy.openFailed);
       if (!response.ok) {
+        if (result?.code === "secret_locked" && typeof result.unlockAt === "number" && typeof result.now === "number") {
+          setStatus("open", undefined, "error", formatSecretLockedMessage(result.unlockAt, result.now, copy));
+          return;
+        }
         if (result?.code === "secret_opened" || result?.code === "secret_missing") openLocked = true;
         throw new Error(mapServerError(result?.code, "open"));
       }
@@ -256,7 +264,7 @@
       <button class={`relative px-5 pb-[14px] pt-4 font-semibold ${mode === "open" ? "text-green after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-green" : "text-muted"}`} type="button" role="tab" aria-selected={mode === "open"} on:click={() => (mode = "open")}>{copy.tabOpen}</button>
     </div>
     {#if mode === "create"}
-      <CreatePanel t={copy} {kind} bind:textValue {imagePreviewUrl} {imageName} {imageSize} {resultLink} statusMessage={resolveStatusMessage(createStatus, copy)} statusKind={createStatus.kind} bind:fileInput onSelectKind={(value) => (kind = value)} onPickImage={() => fileInput?.click()} onImageChange={handleImageChange} onCreate={createSecret} onCopy={copyResultLink} />
+      <CreatePanel t={copy} {kind} {unlockDelayMinutes} unlockDelayOptions={UNLOCK_DELAY_OPTIONS} bind:textValue {imagePreviewUrl} {imageName} {imageSize} {resultLink} statusMessage={resolveStatusMessage(createStatus, copy)} statusKind={createStatus.kind} bind:fileInput onSelectKind={(value) => (kind = value)} onSelectUnlockDelay={(value) => (unlockDelayMinutes = value)} onPickImage={() => fileInput?.click()} onImageChange={handleImageChange} onCreate={createSecret} onCopy={copyResultLink} />
     {:else}
       <OpenPanel t={copy} bind:openValue {openLocked} statusMessage={resolveStatusMessage(openStatus, copy)} statusKind={openStatus.kind} {viewerVisible} {countdown} {viewerText} viewerImageUrl={viewerImageUrl} onInput={() => (openLocked = false)} onPaste={handleOpenPaste} onKeydown={(event) => event.key === "Enter" && (event.preventDefault(), openSecret())} onOpen={openSecret} />
     {/if}

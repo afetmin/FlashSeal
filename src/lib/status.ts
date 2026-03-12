@@ -5,6 +5,7 @@ export type StatusMessageKey = keyof Translation;
 export type StatusState = { kind: StatusKind; message?: string; messageKey?: StatusMessageKey };
 
 export function mapServerError(code: string | undefined, source: "create" | "open"): StatusMessageKey {
+  if (code === "secret_locked") return "secretLocked";
   if (code === "secret_opened") return "secretOpened";
   if (code === "secret_missing") return "secretMissing";
   if (code === "payload_too_large") return "imageTooLarge";

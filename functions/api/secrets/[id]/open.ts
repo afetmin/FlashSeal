@@ -10,6 +10,7 @@ interface SecretRecord {
   iv: string;
   mimeType: string;
   createdAt: number;
+  unlockAt?: number;
   viewState: "unopened" | "viewing";
   viewStartedAt: number | null;
 }
@@ -35,13 +36,19 @@ export async function onRequestPost(context: {
   }
 
   const record = JSON.parse(raw) as SecretRecord;
+  const now = Date.now();
+  const unlockAt = record.unlockAt ?? record.createdAt;
+
+  if (now < unlockAt) {
+    return json({ error: t("secretLocked"), code: "secret_locked", unlockAt, now }, 423);
+  }
 
   if (record.viewState !== "unopened") {
     return json({ error: t("secretOpened"), code: "secret_opened" }, 410);
   }
 
   record.viewState = "viewing";
-  record.viewStartedAt = Date.now();
+  record.viewStartedAt = now;
 
   await env.SECRETS.put(id, JSON.stringify(record), {
     expirationTtl: VIEW_CLEANUP_TTL_IN_SECONDS
