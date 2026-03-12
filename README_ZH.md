@@ -1,13 +1,11 @@
 <div align="center">
 
-# FlashSeal
+# 🛡️ FlashSeal
 
 **基于 Cloudflare Pages 与 KV 的加密阅后即焚文本和图片分享工具**
 
 [English](./README.md) | 简体中文 | [日本語](./README_JA.md) | [한국어](./README_KO.md)
 
-[![GitHub stars](https://img.shields.io/github/stars/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/issues)
 [![GitHub license](https://img.shields.io/github/license/afetmin/FlashSeal?style=flat-square)](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
 [![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-F38020?style=flat-square&logo=cloudflare)](https://pages.cloudflare.com/)
 [![Cloudflare KV](https://img.shields.io/badge/Cloudflare-KV-F38020?style=flat-square&logo=cloudflare)](https://developers.cloudflare.com/kv/)
@@ -26,17 +24,17 @@ FlashSeal 是一个基于 Cloudflare Pages、Pages Functions 和 KV 的加密阅
 
 ![FlashSeal 预览](./images/preview.png)
 
-## 功能概览
+## 功能特性
 
-- 支持 `text` 和 `image` 两种秘密内容
-- 单张图片大小限制为 `15MB`
-- 支持直接粘贴图片上传
-- 通过直接链接分享：`/s/:id#k=<base64url-key>`
-- 只有第一个成功访问的人可以打开秘密
-- 支持设置 `5`、`15`、`30` 分钟后才可打开
-- 打开后内容可见 `60 秒`
-- 即使设置了延迟打开，未打开的秘密也会在创建 `1 小时` 后过期
-- 内容在浏览器中加密，后端只保存密文
+- `🛡️ 端到端加密` 内容在浏览器内完成加密后再上传，服务端只存储密文。
+- `🔥 阅后即焚` 每条秘密只允许首次成功访问者打开一次，让分享天然具备一次性。
+- `📝 文本与图片支持` 统一支持文本和图片分享，单张图片上传上限为 `15MB`。
+- `📋 粘贴即上传` 支持直接从剪贴板粘贴图片，减少手动选择文件的步骤。
+- `🔗 密钥留在链接片段` 分享链接采用 `/s/:id#k=<base64url-key>` 形式，解密密钥保留在客户端。
+- `⏱️ 延时开启` 可预设在 `5`、`15`、`30` 分钟后才允许打开。
+- `⌛ 限时可见` 一旦成功打开，明文内容仅显示 `60 秒` 后自动消失。
+- `🗑️ 自动过期` 未被打开的秘密会在创建 `1 小时` 后自动失效，延时开启同样遵循该规则。
+- `⚡ 轻量前端` 页面不依赖重型客户端运行时框架，加载更快，体验更聚焦。
 
 ## 技术栈
 

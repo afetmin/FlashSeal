@@ -1,13 +1,11 @@
 <div align="center">
 
-# FlashSeal
+# 🛡️ FlashSeal
 
 **Cloudflare Pages와 KV 기반의 암호화 열람 후 자동 소각 텍스트·이미지 공유 도구**
 
 [English](./README.md) | [简体中文](./README_ZH.md) | [日本語](./README_JA.md) | 한국어
 
-[![GitHub stars](https://img.shields.io/github/stars/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/issues)
 [![GitHub license](https://img.shields.io/github/license/afetmin/FlashSeal?style=flat-square)](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
 [![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-F38020?style=flat-square&logo=cloudflare)](https://pages.cloudflare.com/)
 [![Cloudflare KV](https://img.shields.io/badge/Cloudflare-KV-F38020?style=flat-square&logo=cloudflare)](https://developers.cloudflare.com/kv/)
@@ -26,17 +24,17 @@ FlashSeal은 Cloudflare Pages, Pages Functions, KV를 기반으로 한 암호화
 
 ![FlashSeal 미리보기](./images/preview.png)
 
-## 기능 개요
+## 기능
 
-- `text`, `image` 시크릿 지원
-- 이미지 1개당 크기 제한은 `15MB`
-- 이미지 붙여넣기 업로드 지원
-- 공유 링크 형식: `/s/:id#k=<base64url-key>`
-- 처음으로 정상적으로 연 1명만 내용을 볼 수 있음
-- `5`, `15`, `30`분 뒤에 열 수 있도록 지연 열기 설정 지원
-- 열람 후 `60초` 동안만 표시
-- 지연 열기를 설정해도 열리지 않은 시크릿은 생성 후 `1시간` 뒤 만료
-- 콘텐츠는 브라우저에서 암호화되며 서버에는 암호문만 저장
+- `🛡️ 종단간 암호화` 콘텐츠는 브라우저에서 암호화된 뒤 업로드되며, 서버에는 암호문만 저장됩니다.
+- `🔥 열람 후 자동 소각` 시크릿은 처음으로 정상 열람한 1명만 볼 수 있어, 공유가 일회성으로 유지됩니다.
+- `📝 텍스트와 이미지 지원` 텍스트와 이미지를 같은 흐름으로 공유할 수 있으며, 이미지는 `15MB`까지 업로드할 수 있습니다.
+- `📋 붙여넣기 업로드` 클립보드에 복사한 이미지를 바로 붙여넣어 업로드할 수 있습니다.
+- `🔗 링크 프래그먼트에 키 보관` 공유 링크는 `/s/:id#k=<base64url-key>` 형식을 사용해 복호화 키를 클라이언트 측에 남겨 둡니다.
+- `⏱️ 지연 열기` `5`, `15`, `30`분 후에만 열 수 있도록 대기 시간을 설정할 수 있습니다.
+- `⌛ 제한 시간 열람` 한 번 열리면 복호화된 내용은 `60초` 동안만 표시됩니다.
+- `🗑️ 자동 만료` 열리지 않은 시크릿은 생성 후 `1시간`이 지나면 자동으로 만료되며, 지연 열기 설정 시에도 동일합니다.
+- `⚡ 경량 프런트엔드` 무거운 클라이언트 런타임 프레임워크 없이 빠르고 집중된 사용 경험을 제공합니다.
 
 ## 기술 스택
 

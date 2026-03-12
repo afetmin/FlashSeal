@@ -1,13 +1,11 @@
 <div align="center">
 
-# FlashSeal
+# 🛡️ FlashSeal
 
 **Encrypted burn-after-open text and image sharing on Cloudflare Pages and KV**
 
 English | [简体中文](./README_ZH.md) | [日本語](./README_JA.md) | [한국어](./README_KO.md)
 
-[![GitHub stars](https://img.shields.io/github/stars/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/issues)
 [![GitHub license](https://img.shields.io/github/license/afetmin/FlashSeal?style=flat-square)](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
 [![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-F38020?style=flat-square&logo=cloudflare)](https://pages.cloudflare.com/)
 [![Cloudflare KV](https://img.shields.io/badge/Cloudflare-KV-F38020?style=flat-square&logo=cloudflare)](https://developers.cloudflare.com/kv/)
@@ -26,17 +24,17 @@ The page ships without a heavy runtime framework on the client.
 
 ![FlashSeal preview](./images/preview.png)
 
-## What It Does
+## Features
 
-- Supports `text` and `image` secrets
-- Limits each image to `15MB`
-- Supports paste-to-upload for images
-- Shares secrets through direct links: `/s/:id#k=<base64url-key>`
-- Lets only the first successful viewer open a secret
-- Supports delayed opening with preset options: `5`, `15`, or `30` minutes
-- Keeps opened secrets visible for `60 seconds`
-- Expires unopened secrets `1 hour` after creation, even when delayed opening is enabled
-- Encrypts in the browser and stores ciphertext only
+- `🛡️ End-to-End Encryption` Encrypts secrets in the browser before upload, so the server stores ciphertext only.
+- `🔥 Burn After Open` Each secret can be opened successfully only once, which keeps sharing intentionally ephemeral.
+- `📝 Text And Image Support` Share both text snippets and images in one lightweight workflow, with image uploads up to `15MB`.
+- `📋 Paste To Upload` Drop images in quickly with clipboard paste support instead of manual file picking every time.
+- `🔗 Key-In-Fragment Links` Secrets are shared as direct links like `/s/:id#k=<base64url-key>`, keeping the decryption key on the client side.
+- `⏱️ Delayed Opening` Hold access until a chosen unlock window of `5`, `15`, or `30` minutes.
+- `⌛ Timed Self-Destruct View` Once opened, the decrypted content stays visible for `60 seconds` before disappearing.
+- `🗑️ Automatic Expiration` Unopened secrets are purged after `1 hour`, including those created with delayed opening enabled.
+- `⚡ Lightweight Frontend` Ships without a heavy client runtime framework, keeping the sharing page fast and focused.
 
 ## Stack
 
@@ -66,8 +64,6 @@ The page ships without a heavy runtime framework on the client.
 - npm
 - A free Cloudflare account
 - Wrangler 4, installed through project dependencies
-
-`wrangler@4` expects Node 20+. If you run with Node 18, Wrangler may still install but will warn or behave inconsistently.
 
 ## Local Development
 
@@ -178,3 +174,7 @@ Then connect the repo in Pages and keep:
 
 - Build command: `npm run build`
 - Output directory: `public`
+
+## License
+
+[MIT](LICENSE)

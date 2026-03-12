@@ -1,13 +1,11 @@
 <div align="center">
 
-# FlashSeal
+# 🛡️ FlashSeal
 
 **Cloudflare Pages と KV で動く、暗号化対応の閲覧後自動消去テキスト・画像共有ツール**
 
 [English](./README.md) | [简体中文](./README_ZH.md) | 日本語 | [한국어](./README_KO.md)
 
-[![GitHub stars](https://img.shields.io/github/stars/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/afetmin/FlashSeal?style=flat-square&logo=github)](https://github.com/afetmin/FlashSeal/issues)
 [![GitHub license](https://img.shields.io/github/license/afetmin/FlashSeal?style=flat-square)](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
 [![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-F38020?style=flat-square&logo=cloudflare)](https://pages.cloudflare.com/)
 [![Cloudflare KV](https://img.shields.io/badge/Cloudflare-KV-F38020?style=flat-square&logo=cloudflare)](https://developers.cloudflare.com/kv/)
@@ -26,17 +24,17 @@ FlashSeal は、Cloudflare Pages、Pages Functions、KV を使った暗号化対
 
 ![FlashSeal preview](./images/preview.png)
 
-## 機能概要
+## 機能
 
-- `text` と `image` のシークレットをサポート
-- 画像 1 枚あたりの上限は `15MB`
-- 画像の貼り付けアップロードに対応
-- 共有リンク形式: `/s/:id#k=<base64url-key>`
-- 最初に正常にアクセスした 1 人だけが閲覧可能
-- `5`、`15`、`30` 分後に開封可能とする遅延設定に対応
-- 開封後の表示時間は `60 秒`
-- 遅延開封を設定しても、未開封のシークレットは作成から `1 時間` で期限切れ
-- コンテンツはブラウザ内で暗号化され、サーバーには暗号文のみ保存
+- `🛡️ エンドツーエンド暗号化` コンテンツはブラウザ内で暗号化されてから送信され、サーバーには暗号文のみが保存されます。
+- `🔥 閲覧後自動消去` シークレットは最初に正常に開いた 1 人だけが閲覧でき、共有を一度きりに保てます。
+- `📝 テキストと画像に対応` テキストと画像を同じフローで共有でき、画像は 1 枚あたり `15MB` まで扱えます。
+- `📋 貼り付けアップロード` クリップボードから画像をそのまま貼り付けてアップロードできます。
+- `🔗 フラグメントに鍵を保持` 共有リンクは `/s/:id#k=<base64url-key>` 形式で、復号鍵はクライアント側に残ります。
+- `⏱️ 遅延オープン` `5`、`15`、`30` 分後に開封可能にする待機設定を選べます。
+- `⌛ 時限表示` 一度開封されると、復号された内容は `60 秒` 間だけ表示されます。
+- `🗑️ 自動期限切れ` 未開封のシークレットは作成から `1 時間` で自動的に失効し、遅延オープン設定時も同様です。
+- `⚡ 軽量フロントエンド` 重量級のクライアントランタイムに依存せず、読み込みを速く保ちます。
 
 ## 技術スタック
 
