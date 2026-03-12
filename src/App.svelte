@@ -9,7 +9,7 @@
   import { HOME_URL, MAX_IMAGE_BYTES, SECRET_ID_LENGTH, VIEW_DURATION_SECONDS, base64UrlDecode, base64UrlEncode, extractImageFile, formatBytes, loadLanguage, parseSecretUrl, randomId, readJsonResponse, resolveInitialMode, type Mode, type SecretKind } from "./lib/core";
   import { syncMeta } from "./lib/meta";
   import { asStatusMessageKey, mapServerError, resolveStatusMessage, type StatusMessageKey, type StatusState } from "./lib/status";
-  import { UNLOCK_DELAY_OPTIONS, formatSecretLockedMessage, type UnlockDelayMinutes } from "./lib/unlock";
+  import { UNLOCK_DELAY_OPTIONS, getRemainingUnlockMinutes, type UnlockDelayMinutes } from "./lib/unlock";
 
   type CreateResponse = { code?: string };
   type OpenResponse = { code?: string; iv: string; ciphertext: string; kind: SecretKind; mimeType?: string; unlockAt?: number; now?: number };
@@ -70,8 +70,8 @@
     menuOpen = false;
   }
 
-  function setStatus(scope: "create" | "open", messageKey?: StatusMessageKey, kindValue: StatusState["kind"] = "", message = ""): void {
-    const nextStatus = { kind: kindValue, message, messageKey };
+  function setStatus(scope: "create" | "open", messageKey?: StatusMessageKey, kindValue: StatusState["kind"] = "", message = "", messageValues?: Record<string, string | number>): void {
+    const nextStatus = { kind: kindValue, message, messageKey, messageValues };
     if (scope === "create") createStatus = nextStatus;
     else openStatus = nextStatus;
   }
@@ -139,7 +139,9 @@
       const result = await readJsonResponse<OpenResponse>(response, copy.openFailed);
       if (!response.ok) {
         if (result?.code === "secret_locked" && typeof result.unlockAt === "number" && typeof result.now === "number") {
-          setStatus("open", undefined, "error", formatSecretLockedMessage(result.unlockAt, result.now, copy));
+          const remainingMinutes = getRemainingUnlockMinutes(result.unlockAt, result.now);
+          const messageKey = remainingMinutes <= 1 ? "secretLockedSoon" : "secretLockedMinutes";
+          setStatus("open", messageKey, "error", "", remainingMinutes <= 1 ? undefined : { minutes: remainingMinutes });
           return;
         }
         if (result?.code === "secret_opened" || result?.code === "secret_missing") openLocked = true;

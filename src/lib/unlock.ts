@@ -19,9 +19,13 @@ export function formatSecretLockedMessage(
   now: number,
   t: Pick<Translation, "secretLocked" | "secretLockedMinutes" | "secretLockedSoon">
 ): string {
-  const remainingMinutes = Math.ceil(Math.max(0, unlockAt - now) / ONE_MINUTE_IN_MS);
+  const remainingMinutes = getRemainingUnlockMinutes(unlockAt, now);
   if (remainingMinutes <= 1) return t.secretLockedSoon;
   return interpolateTemplate(t.secretLockedMinutes, { minutes: remainingMinutes });
+}
+
+export function getRemainingUnlockMinutes(unlockAt: number, now: number): number {
+  return Math.ceil(Math.max(0, unlockAt - now) / ONE_MINUTE_IN_MS);
 }
 
 function interpolateTemplate(template: string, values: Record<string, number>): string {
