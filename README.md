@@ -13,7 +13,7 @@ English | [简体中文](./README_ZH.md) | [日本語](./README_JA.md) | [한국
 [![Cloudflare KV](https://img.shields.io/badge/Cloudflare-KV-F38020?style=flat-square&logo=cloudflare)](https://developers.cloudflare.com/kv/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-[Source Code](https://github.com/afetmin/FlashSeal) | [Deploy Guide](https://github.com/afetmin/FlashSeal#deploy-to-cloudflare-pages) | [Report Issue](https://github.com/afetmin/FlashSeal/issues) | [License](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
+[Live Demo](https://flashseal.space/) | [Source Code](https://github.com/afetmin/FlashSeal) | [Deploy Guide](https://github.com/afetmin/FlashSeal#deploy-to-cloudflare-pages) | [Report Issue](https://github.com/afetmin/FlashSeal/issues) | [License](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
 
 </div>
 
@@ -21,6 +21,10 @@ English | [简体中文](./README_ZH.md) | [日本語](./README_JA.md) | [한국
 
 FlashSeal is an encrypted burn-after-open sharing tool for text and images, built on Cloudflare Pages, Pages Functions, and KV.
 The page ships without a heavy runtime framework on the client.
+
+## Preview
+
+![FlashSeal preview](./images/preview.png)
 
 ## What It Does
 

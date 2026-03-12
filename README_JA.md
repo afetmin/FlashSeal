@@ -13,7 +13,7 @@
 [![Cloudflare KV](https://img.shields.io/badge/Cloudflare-KV-F38020?style=flat-square&logo=cloudflare)](https://developers.cloudflare.com/kv/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-[ソースコード](https://github.com/afetmin/FlashSeal) | [デプロイ手順](https://github.com/afetmin/FlashSeal#cloudflare-pages-へのデプロイ) | [Issue 報告](https://github.com/afetmin/FlashSeal/issues) | [ライセンス](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
+[Live Demo](https://flashseal.space/) | [ソースコード](https://github.com/afetmin/FlashSeal) | [デプロイ手順](https://github.com/afetmin/FlashSeal#cloudflare-pages-へのデプロイ) | [Issue 報告](https://github.com/afetmin/FlashSeal/issues) | [ライセンス](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
 
 </div>
 
@@ -21,6 +21,10 @@
 
 FlashSeal は、Cloudflare Pages、Pages Functions、KV を使った暗号化対応の閲覧後自動消去テキスト・画像共有ツールです。
 ページは重量級のランタイムフレームワークに依存しません。
+
+## プレビュー
+
+![FlashSeal preview](./images/preview.png)
 
 ## 機能概要
 

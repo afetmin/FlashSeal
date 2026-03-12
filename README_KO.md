@@ -13,7 +13,7 @@
 [![Cloudflare KV](https://img.shields.io/badge/Cloudflare-KV-F38020?style=flat-square&logo=cloudflare)](https://developers.cloudflare.com/kv/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-[소스 코드](https://github.com/afetmin/FlashSeal) | [배포 가이드](https://github.com/afetmin/FlashSeal#cloudflare-pages-배포) | [이슈 제보](https://github.com/afetmin/FlashSeal/issues) | [라이선스](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
+[라이브 데모](https://flashseal.space/) | [소스 코드](https://github.com/afetmin/FlashSeal) | [배포 가이드](https://github.com/afetmin/FlashSeal#cloudflare-pages-배포) | [이슈 제보](https://github.com/afetmin/FlashSeal/issues) | [라이선스](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
 
 </div>
 
@@ -21,6 +21,10 @@
 
 FlashSeal은 Cloudflare Pages, Pages Functions, KV를 기반으로 한 암호화 열람 후 자동 소각 텍스트·이미지 공유 도구입니다.
 페이지는 무거운 런타임 프레임워크에 의존하지 않습니다.
+
+## 미리보기
+
+![FlashSeal 미리보기](./images/preview.png)
 
 ## 기능 개요
 

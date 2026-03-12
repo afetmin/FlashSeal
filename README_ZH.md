@@ -13,7 +13,7 @@
 [![Cloudflare KV](https://img.shields.io/badge/Cloudflare-KV-F38020?style=flat-square&logo=cloudflare)](https://developers.cloudflare.com/kv/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-[源码](https://github.com/afetmin/FlashSeal) | [部署说明](https://github.com/afetmin/FlashSeal#部署到-cloudflare-pages) | [问题反馈](https://github.com/afetmin/FlashSeal/issues) | [许可证](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
+[在线演示](https://flashseal.space/) | [源码](https://github.com/afetmin/FlashSeal) | [部署说明](https://github.com/afetmin/FlashSeal#部署到-cloudflare-pages) | [问题反馈](https://github.com/afetmin/FlashSeal/issues) | [许可证](https://github.com/afetmin/FlashSeal/blob/master/LICENSE)
 
 </div>
 
@@ -21,6 +21,10 @@
 
 FlashSeal 是一个基于 Cloudflare Pages、Pages Functions 和 KV 的加密阅后即焚文本与图片分享工具。
 页面不依赖重型运行时框架。
+
+## 预览
+
+![FlashSeal 预览](./images/preview.png)
 
 ## 功能概览
 
