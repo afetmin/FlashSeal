@@ -13,6 +13,19 @@
 
   type CreateResponse = { code?: string };
   type OpenResponse = { code?: string; iv: string; ciphertext: string; kind: SecretKind; mimeType?: string; unlockAt?: number; now?: number };
+  const structuredData = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "FlashSeal",
+    url: HOME_URL,
+    applicationCategory: "SecurityApplication",
+    operatingSystem: "Web",
+    description: "Encrypted burn-after-open text and image sharing.",
+    image: `${HOME_URL}og-image.png`,
+    inLanguage: ["en", "zh", "ja", "ko"],
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    publisher: { "@type": "Organization", name: "FlashSeal", url: HOME_URL }
+  }).replace(/</g, "\\u003c");
 
   let language: LanguageCode = DEFAULT_LANGUAGE;
   let mode: Mode = "create";
@@ -248,9 +261,7 @@
 </script>
 
 <svelte:head>
-  <script type="application/ld+json">
-    {JSON.stringify({ "@context": "https://schema.org", "@type": "WebApplication", name: "FlashSeal", url: HOME_URL, applicationCategory: "SecurityApplication", operatingSystem: "Web", description: "Encrypted burn-after-open text and image sharing.", image: `${HOME_URL}og-image.png`, inLanguage: ["en", "zh", "ja", "ko"], offers: { "@type": "Offer", price: "0", priceCurrency: "USD" }, publisher: { "@type": "Organization", name: "FlashSeal", url: HOME_URL } })}
-  </script>
+  {@html `<script type="application/ld+json">${structuredData}<\/script>`}
 </svelte:head>
 
 <main class="mx-auto w-full max-w-[980px] px-5 pb-10 pt-4 sm:px-5">
