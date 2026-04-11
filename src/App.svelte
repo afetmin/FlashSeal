@@ -11,7 +11,7 @@
   import { asStatusMessageKey, mapServerError, resolveStatusMessage, type StatusMessageKey, type StatusState } from "./lib/status";
   import { UNLOCK_DELAY_OPTIONS, getRemainingUnlockMinutes, type UnlockDelayMinutes } from "./lib/unlock";
 
-  type CreateResponse = { code?: string };
+  type CreateResponse = { code?: string; id?: string; success?: boolean };
   type OpenResponse = { code?: string; iv: string; ciphertext: string; kind: SecretKind; mimeType?: string; unlockAt?: number; now?: number };
   const structuredData = JSON.stringify({
     "@context": "https://schema.org",
@@ -116,7 +116,7 @@
       const encryptedBytes = await crypto.subtle.encrypt({ name: "AES-GCM", iv: ivBytes }, cryptoKey, secretPayload.bytes);
       const body = JSON.stringify({ id, kind: secretPayload.kind, mimeType: secretPayload.mimeType, unlockDelayMinutes, iv: base64UrlEncode(ivBytes), ciphertext: base64UrlEncode(new Uint8Array(encryptedBytes)) });
       const response = await fetch(`/api/secrets?lang=${language}`, { method: "POST", headers: { "Content-Type": "application/json" }, body });
-      const result = await response.json() as CreateResponse;
+      const result = await readJsonResponse<CreateResponse>(response, copy.createFailed);
       if (!response.ok) throw new Error(mapServerError(result?.code, "create"));
       resultLink = `${window.location.origin}/s/${id}#k=${base64UrlEncode(keyBytes)}`;
       setStatus("create", "created", "success");

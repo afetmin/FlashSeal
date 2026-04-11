@@ -17,9 +17,14 @@
     <span class="brand-mark-breathe inline-flex h-5 w-5 items-center justify-center text-green" aria-hidden="true"><i data-lucide="shield-check"></i></span>
     <span class="brand-text-breathe">FlashSeal</span>
   </a>
-  <div class="inline-flex items-center gap-3.5">
-    <a class="inline-flex h-[18px] w-[18px] items-center justify-center text-green transition duration-150 hover:-translate-y-px hover:text-green focus-visible:-translate-y-px focus-visible:text-green focus-visible:outline-none" href="https://github.com/afetmin/FlashSeal" target="_blank" rel="noreferrer" aria-label="View FlashSeal on GitHub">
-      <i data-lucide="github" aria-hidden="true"></i>
+  <div class="inline-flex items-center gap-2.5">
+    <a class="inline-flex min-h-[34px] items-center gap-1.5 rounded-xl bg-[#edf2ed] px-3 py-2 font-semibold text-green-deep transition duration-150 hover:-translate-y-px hover:bg-[#e3ede3] focus-visible:-translate-y-px focus-visible:bg-[#e3ede3] focus-visible:outline-none" href="https://github.com/afetmin/FlashSeal" target="_blank" rel="noreferrer" aria-label="View FlashSeal on GitHub">
+      <span class="inline-flex h-[18px] w-[18px] items-center justify-center" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 6v-3.9a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 19.5 4.77 5.07 5.07 0 0 0 19.41 1S18.73.65 17 2.48a13.38 13.38 0 0 0-10 0C5.27.65 4.59 1 4.59 1A5.07 5.07 0 0 0 4.5 4.77 5.44 5.44 0 0 0 3.5 8.5c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.11V22" />
+        </svg>
+      </span>
+      <span>GitHub</span>
     </a>
     <button bind:this={languageButton} class="inline-flex min-h-[34px] items-center gap-1.5 rounded-xl bg-transparent px-2 py-2 text-muted transition duration-150 hover:-translate-y-px hover:text-green focus-visible:-translate-y-px focus-visible:text-green focus-visible:outline-none" type="button" aria-label="Change language" on:click={onToggleMenu}>
       <span class="inline-flex h-[18px] w-[18px] items-center justify-center" aria-hidden="true"><i data-lucide="languages"></i></span>
